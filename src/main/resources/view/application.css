@@ -1,0 +1,32 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+#addButton:hover {
+-fx-background-color:black,white,black;
+-fx-border-width:2px;
+-fx-text-fill:white;
+}
+#removeBtn:hover {
+-fx-background-color:black,white,black;
+-fx-border-width:2px;
+-fx-text-fill:white;
+}
+#loadFileBtn:hover {
+-fx-background-color:black,white,black;
+-fx-border-width:2px;
+-fx-text-fill:white;
+}
+#saveFileBtn:hover {
+-fx-background-color:black,white,black;
+-fx-border-width:2px;
+-fx-text-fill:white;
+}
+#reportBtn:hover {
+-fx-background-color:black,white,black;
+-fx-border-width:2px;
+-fx-text-fill:white;
+}
+#closeButton:hover {
+-fx-background-color:black,white,black;
+-fx-border-width:2px;
+-fx-text-fill:white;
+}

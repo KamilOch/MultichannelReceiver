@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
+   <children>
+      <BorderPane fx:id="rightPane" layoutX="450.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
+         <top>
+            <LineChart fx:id="lineChart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="866.0" BorderPane.alignment="TOP_LEFT">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </LineChart>
+         </top>
+         <center>
+            <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" translateX="-160.0" translateY="-100.0" BorderPane.alignment="CENTER_LEFT">
+               <BorderPane.margin>
+                  <Insets left="200.0" top="100.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </center>
+         <bottom>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="TOP_LEFT">
+               <children>
+                  <Label text="Częstotliwość początkowa [Hz]">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="firstNameField" />
+                  <Label text="Częstotliwość końcowa[Hz]">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="comingHourField" />
+                  <Label layoutX="320.0" layoutY="10.0" text="Rozdzielczość[Hz]">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="comingHourField1" layoutX="463.0" layoutY="10.0" />
+               </children>
+            </HBox>
+         </bottom>
+      </BorderPane>
+      <BorderPane prefHeight="600.0" prefWidth="450.0" AnchorPane.topAnchor="20.0">
+         <left>
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="loadFileBtn" mnemonicParsing="false" onAction="#loadFileHandler" prefHeight="25.0" prefWidth="80.0" text="Wczytaj">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="saveFileBtn" mnemonicParsing="false" onAction="#saveFileHandler" prefHeight="25.0" prefWidth="80.0" text="Zapisz">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addBtnHandle" prefHeight="25.0" prefWidth="80.0" text="Dodaj">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="removeBtn" mnemonicParsing="false" onAction="#removeBtnHandle" prefHeight="25.0" prefWidth="80.0" text="Usuń">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="chartButton" mnemonicParsing="false" onAction="#chartBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Wykres">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="80.0" text="Zamknij">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets left="10.0" top="50.0" />
+               </padding>
+            </VBox>
+         </left>
+         <center>
+            <TableView fx:id="tableView" maxWidth="350.0" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn fx:id="firstNameColumn" maxWidth="200.0" prefWidth="100.0" text="Timestamp" />
+                <TableColumn fx:id="lastNameColumn" maxWidth="200.0" prefWidth="100.0" text="Liczba sygnałów" />
+                  <TableColumn fx:id="roomColumn" maxWidth="200.0" prefWidth="100.0" text="Częstotliwości" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </TableView>
+         </center>
+      </BorderPane>
+      <BorderPane />
+   </children>
+</AnchorPane>
