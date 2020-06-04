@@ -1,5 +1,7 @@
 package controller;
-	
+
+
+import dataPersist.RecordService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -26,6 +28,11 @@ public class Main extends Application {
 			ConfigurableApplicationContext springContext;
 			springContext = SpringApplication.run(Main.class);
 			loader.setControllerFactory(springContext::getBean);
+
+			//TODO to mi nie dziala Kamil O // narazie
+			RecordService recordService = (RecordService) springContext.getBean(RecordService.class);
+
+
 
 
 			MainWindowController mainWindowController = loader.getController();
