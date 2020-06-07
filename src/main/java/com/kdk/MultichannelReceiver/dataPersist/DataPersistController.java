@@ -1,4 +1,4 @@
-package dataPersist;
+package com.kdk.MultichannelReceiver.dataPersist;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

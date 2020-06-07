@@ -1,4 +1,4 @@
-package dataPersist;
+package com.kdk.MultichannelReceiver.dataPersist;
 
 import lombok.*;
 
@@ -8,7 +8,6 @@ import java.util.Set;
 @Builder
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 
 @Entity
 @Table(name = "records")
@@ -18,10 +17,10 @@ public class RecordEntity {
     @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RECORD_SEQ")
-    @Column (name = "id")
+    @Column(name = "id")
     private long id;
 
-    @Column(name= "time_stamp")
+    @Column(name = "time_stamp")
     private double timeStamp;
 
     @Column(name = "seq_number")

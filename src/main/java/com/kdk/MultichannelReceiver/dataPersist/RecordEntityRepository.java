@@ -1,4 +1,4 @@
-package dataPersist;
+package com.kdk.MultichannelReceiver.dataPersist;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;

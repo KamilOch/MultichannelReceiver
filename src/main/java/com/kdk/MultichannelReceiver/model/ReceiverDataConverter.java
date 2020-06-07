@@ -1,11 +1,9 @@
-package model;
-
-import java.util.Random;
+package com.kdk.MultichannelReceiver.model;
 
 import org.apache.commons.lang3.event.EventListenerSupport;
 
 /**
- * Klasa managera umo¿liwiajaca pod³aczenie klas jako s³uchaczy zdarzen
+ * Klasa managera umoï¿½liwiajaca podï¿½aczenie klas jako sï¿½uchaczy zdarzen
  * 
  * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
  */
@@ -21,7 +19,7 @@ public class ReceiverDataConverter {
 		
 	}
 	/**
-     * Generuje dane i powiadamia s³uchaczy
+     * Generuje dane i powiadamia sï¿½uchaczy
      */  
 	public void convertData() {
 		
@@ -44,9 +42,9 @@ public class ReceiverDataConverter {
 	
 	
 	/**
-     * Dodaje s³uchcza zdarzeñ odebrania danych.
+     * Dodaje sï¿½uchcza zdarzeï¿½ odebrania danych.
      *
-     * @param listener - dodawany s³uchacz
+     * @param listener - dodawany sï¿½uchacz
      */
 	public void addListener(ReceiverDataConverterListener listener) {
         if (listener != null) {
@@ -55,9 +53,9 @@ public class ReceiverDataConverter {
     }
 
     /**
-     * Usuwa s³uchacza zdarzeñ odebrania danych.
+     * Usuwa sï¿½uchacza zdarzeï¿½ odebrania danych.
      *
-     * @param listener - usuwany s³ychacz
+     * @param listener - usuwany sï¿½ychacz
      */
     public void removeListener(ReceiverDataConverterListener listener) {
         if (listener != null) {
@@ -68,8 +66,8 @@ public class ReceiverDataConverter {
     /**
      * Przetwarza dane odebrane z SOCKETA.
      *
-     * @param ctx Kontekst wiadomoœci JMS
-     * @param msg Odebrana wiadomoœæ
+     * @param ctx Kontekst wiadomoï¿½ci JMS
+     * @param msg Odebrana wiadomoï¿½ï¿½
      */
 //    private static void onNotify(MsgContext ctx, Event msg) {
 //

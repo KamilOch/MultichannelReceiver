@@ -1,9 +1,10 @@
-package dataPersist;
+package com.kdk.MultichannelReceiver.dataPersist;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+//@ComponentScan("com.kdk.MultichannelReceiver.dataPersist")
 public class RecordService {
 
     @Autowired
@@ -11,7 +12,7 @@ public class RecordService {
     }
 
 //    private final RecordEntityRepository recordEntityRepository;
-
+//
 //    @Autowired
 //    public RecordService(RecordEntityRepository recordEntityRepository) {
 //        this.recordEntityRepository = recordEntityRepository;

@@ -1,8 +1,7 @@
-package model;
+package com.kdk.MultichannelReceiver.model;
 
 import org.apache.commons.lang3.event.EventListenerSupport;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -40,9 +39,9 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener{
 	}
 	
 	/**
-     * Dodaje s³uchcza zdarzeñ odebrania danych.
+     * Dodaje sï¿½uchcza zdarzeï¿½ odebrania danych.
      *
-     * @param listener - dodawany s³uchacz
+     * @param listener - dodawany sï¿½uchacz
      */
 	public void addListener(SpectrumWaterfallListener listener) {
         if (listener != null) {
@@ -51,9 +50,9 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener{
     }
 
     /**
-     * Usuwa s³uchacza zdarzeñ odebrania danych.
+     * Usuwa sï¿½uchacza zdarzeï¿½ odebrania danych.
      *
-     * @param listener - usuwany s³ychacz
+     * @param listener - usuwany sï¿½ychacz
      */
     public void removeListener(SpectrumWaterfallListener listener) {
         if (listener != null) {
@@ -63,7 +62,7 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener{
 
 	private void fillImageLine(double[] receivedData) {		
 		//TO DO 
-		//poprawiæ - wpisywanie w odwrotnej kolejnoœci na górze najnowsze dane, starsze linie przesuwane s¹ w dó³, najstarsze dane s¹ usuwane
+		//poprawiï¿½ - wpisywanie w odwrotnej kolejnoï¿½ci na gï¿½rze najnowsze dane, starsze linie przesuwane sï¿½ w dï¿½, najstarsze dane sï¿½ usuwane
 		
 		// Writing the color of the image		
 		for (int x = 0; x < waterfallLength; x++) {
@@ -103,7 +102,7 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener{
 		}
 		
 		
-		//przekazanie obrazu do klasy wyœwietlaj¹cej
+		//przekazanie obrazu do klasy wyï¿½wietlajï¿½cej
 		spectrumWaterfallListeners.fire().onImageProcessed( waterfallImage, seqNumber, timeStamp, freqStart, freqStep);  
 		
 		

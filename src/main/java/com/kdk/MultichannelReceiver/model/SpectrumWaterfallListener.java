@@ -1,11 +1,11 @@
-package model;
+package com.kdk.MultichannelReceiver.model;
 
 import javafx.scene.image.WritableImage;
 
 public interface SpectrumWaterfallListener {
 
 	/**
-	 * Interfejs dla s³uchaczy SpectrumWaterfall. Do póŸniejszych zastosowañ.
+	 * Interfejs dla sï¿½uchaczy SpectrumWaterfall. Do pï¿½niejszych zastosowaï¿½.
 	 * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
 	 */
 		

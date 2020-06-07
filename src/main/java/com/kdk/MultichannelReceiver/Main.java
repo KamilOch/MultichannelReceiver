@@ -1,17 +1,17 @@
-package controller;
+package com.kdk.MultichannelReceiver;
 
 
-import dataPersist.RecordService;
+import com.kdk.MultichannelReceiver.controller.MainWindowController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
+@SpringBootApplication
 public class Main extends Application {
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -25,12 +25,12 @@ public class Main extends Application {
 			Scene scene=new Scene(pane);
 
 //			SPRING!!
-			ConfigurableApplicationContext springContext;
-			springContext = SpringApplication.run(Main.class);
-			loader.setControllerFactory(springContext::getBean);
+//			ConfigurableApplicationContext springContext;
+//			springContext = SpringApplication.run(Main.class);
+//			loader.setControllerFactory(springContext::getBean);
 
 			//TODO to mi nie dziala Kamil O // narazie
-			RecordService recordService = (RecordService) springContext.getBean(RecordService.class);
+//			RecordService recordService = (RecordService) springContext.getBean(RecordService.class);
 
 
 
@@ -48,6 +48,8 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
+//		SpringApplication.run(MultichannelReceiverApplication.class, args);
+//		SpringApplication.run(Main.class, args);
 		launch(args);
 	}
 	

@@ -1,4 +1,4 @@
-package dataPersist;
+package com.kdk.MultichannelReceiver.dataPersist;
 
 import lombok.*;
 
@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Builder
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 
 @Entity
 @Table(name = "received_records")

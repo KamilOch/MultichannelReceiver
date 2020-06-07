@@ -1,7 +1,7 @@
 /**
  * 
  */
-package model;
+package com.kdk.MultichannelReceiver.model;
 
 /**
  * @author Wilgucki

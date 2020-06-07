@@ -1,19 +1,19 @@
-package model;
+package com.kdk.MultichannelReceiver.model;
 
-import dataPersist.RecordService;
+import com.kdk.MultichannelReceiver.dataPersist.RecordService;
 
 public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 
     RecordService recordService;
-    double threshold;//próg decyzyjny powy¿ej którego wszystkie przekroczenia poziomu widma traktujemy jako sygna³y uzyteczne
-    //dodaæ wymagane zmienne na kolekcje danych
+    double threshold;//prï¿½g decyzyjny powyï¿½ej ktï¿½rego wszystkie przekroczenia poziomu widma traktujemy jako sygnaï¿½y uzyteczne
+    //dodaï¿½ wymagane zmienne na kolekcje danych
 
     public SpectrumDataProcessor() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    //metoda do przetwarzania widma i znajdowania sygna³ów powy¿ej progu decyzyjnego a potem znajdowanie pików (wykorzystaæ ró¿niczkê) i dla tych wartoœci maksymalnych okreœliææ czêstotliwoœci
+    //metoda do przetwarzania widma i znajdowania sygnaï¿½ï¿½w powyï¿½ej progu decyzyjnego a potem znajdowanie pikï¿½w (wykorzystaï¿½ rï¿½niczkï¿½) i dla tych wartoï¿½ci maksymalnych okreï¿½liï¿½ï¿½ czï¿½stotliwoï¿½ci
     public void proceesSpectrum(double[] receivedData) {
 
         double[] spectrumDataGreaterThanThreshold = new double[receivedData.length];
@@ -43,12 +43,11 @@ public class SpectrumDataProcessor implements ReceiverDataConverterListener {
         proceesSpectrum(receivedData);
 
 
-        //wynik poproszêe zwróciæ w zdarzeniu zwrotnym do klasy kontrolera (podobnie jak w SpectrumWateerfall)
+        //wynik poproszï¿½e zwrï¿½ciï¿½ w zdarzeniu zwrotnym do klasy kontrolera (podobnie jak w SpectrumWateerfall)
 
 
-        //dorobuiæ zapis wyników do bazy danych
-        recordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart,
-                freqStep, threshold);
+        //dorobuiï¿½ zapis wynikï¿½w do bazy danych
+      //  recordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
 
     }
 

@@ -1,11 +1,11 @@
 /**
  * 
  */
-package model;
+package com.kdk.MultichannelReceiver.model;
 
 
 /**
- * Interfejs dla s³uchaczy ReceiverDataConverter. Do póŸniejszych zastosowañ.
+ * Interfejs dla sï¿½uchaczy ReceiverDataConverter. Do pï¿½niejszych zastosowaï¿½.
  * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
  */
 

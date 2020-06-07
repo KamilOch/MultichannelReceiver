@@ -1,35 +1,22 @@
-package controller;
+package com.kdk.MultichannelReceiver.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.kdk.MultichannelReceiver.Main;
+import com.kdk.MultichannelReceiver.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.ReceiverDataConverter;
-import model.ReceiverDataConverterListener;
-import model.SpectrumDataProcessor;
-import model.SpectrumWaterfall;
-import model.SpectrumWaterfallListener;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
 
 public class MainWindowController implements ReceiverDataConverterListener, SpectrumWaterfallListener{
@@ -63,7 +50,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		this.primaryStage=primaryStage;
 
 
-		//dodajemy s³uchaczy odbieraj¹cych dane 
+		//dodajemy sï¿½uchaczy odbierajï¿½cych dane 
 		dataConverter.addListener(this);		
 		dataConverter.addListener(spectrumWaterfall);
 		dataConverter.addListener(spectrumProcessor);
@@ -101,7 +88,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@FXML
 	public void loadFileHandler() {
 		
-		//przyk³ad odczytu przes³anego pliku z danymi widma 
+		//przykï¿½ad odczytu przesï¿½anego pliku z danymi widma 
 		Scanner in = null;
 		FileChooser fileChooser = new FileChooser();
 
@@ -116,7 +103,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 					double freq = in.nextDouble();
 					double spectrum = in.nextDouble();
 					
-					//tu dodaæ klasê przechowuj¹c¹ dane spectrum 
+					//tu dodaï¿½ klasï¿½ przechowujï¿½cï¿½ dane spectrum 
 
 					System.out.printf("frequency: %15f, spectrum: %12f\n", freq, spectrum);
 				}
@@ -143,7 +130,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	
 	@FXML
 	public void chartBtnHandler() {	
-		//generowanie losowych danych i przekazywanie ich do klas nas³uchuj¹cych 
+		//generowanie losowych danych i przekazywanie ich do klas nasï¿½uchujï¿½cych 
 		dataConverter.convertData();		
 	}
 
@@ -156,7 +143,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@Override
 	public void onDataReceived(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart,
 			double freqStep) {		
-		//przyk³adowe wyœwietleie danych
+		//przykï¿½adowe wyï¿½wietleie danych
 		XYChart.Series dataSeries1 = new XYChart.Series();
 		dataSeries1.setName("Wykres Widma");
 
