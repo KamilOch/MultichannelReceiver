@@ -3,14 +3,26 @@ package com.kdk.MultichannelReceiver.dataPersist;
 
 
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Setter;
 
+import javax.persistence.*;
+@Entity
+@Table(name = "threshold_records")
+@SequenceGenerator(name = "THR_RECORD_SEQ", sequenceName = "threshold_records_id_seq", allocationSize = 1)
 public class ThresholdCrossingEntity {
 
-//TODO
+    @Setter(AccessLevel.NONE)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "THR_RECORD_SEQ")
+    @Column (name = "id")
+    private long id;
+
+    @Column(name= "frequency")
+    private double frequency;
+
+    @Column(name= "signal_level")
+    private double signalLevel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id", insertable = false, updatable = false, nullable = false)

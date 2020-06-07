@@ -29,10 +29,10 @@ public class RecordEntity {
     @Column(name = "threshold")
     private double threshold;
 
-    @OneToMany(mappedBy = "record", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "recordEntity", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Set<ThresholdCrossingEntity> thresholdCrossings;
 
-    @OneToMany(mappedBy = "record", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "recordEntity", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Set<ReceivedRecordEntity> receivedRecords;
 
 }

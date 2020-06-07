@@ -12,13 +12,14 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-
+@Component
 public class MainWindowController implements ReceiverDataConverterListener, SpectrumWaterfallListener{
 	private Main main;
 	private Stage primaryStage;
