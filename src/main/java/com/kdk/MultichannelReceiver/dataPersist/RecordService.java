@@ -8,10 +8,16 @@ public class RecordService {
 
 
     private final RecordEntityRepository recordEntityRepository;
+    private final ReceivedRecordEntityRepository receivedRecordEntityRepository;
+    private final ThresholdCrossingEntityRepository thresholdCrossingEntityRepository;
+
+
 
     @Autowired
-    public RecordService(RecordEntityRepository recordEntityRepository) {
+    public RecordService(RecordEntityRepository recordEntityRepository, ReceivedRecordEntityRepository receivedRecordEntityRepository, ThresholdCrossingEntityRepository thresholdCrossingEntityRepository) {
         this.recordEntityRepository = recordEntityRepository;
+        this.receivedRecordEntityRepository = receivedRecordEntityRepository;
+        this.thresholdCrossingEntityRepository = thresholdCrossingEntityRepository;
     }
 
 

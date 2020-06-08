@@ -47,7 +47,7 @@ public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 
 
         //dorobui� zapis wynik�w do bazy danych
-      //  recordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
+        recordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
 
     }
 
