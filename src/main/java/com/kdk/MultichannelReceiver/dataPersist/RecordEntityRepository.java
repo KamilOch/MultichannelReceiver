@@ -5,4 +5,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(path = "records", collectionResourceRel = "records")
 public interface RecordEntityRepository extends PagingAndSortingRepository<RecordEntity, Long> {
+    RecordEntity findByTimeStamp(double timeStamp);
 }

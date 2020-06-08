@@ -2,6 +2,7 @@ package com.kdk.MultichannelReceiver;
 
 
 import com.kdk.MultichannelReceiver.controller.MainWindowController;
+import com.kdk.MultichannelReceiver.dataPersist.RecordService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -34,12 +35,12 @@ public class Main extends Application {
             primaryStage.setMinHeight(600.00);
             Scene scene = new Scene(pane);
 
-            //TODO to mi nie dziala Kamil O // narazie
-//			RecordService recordService = (RecordService) springContext.getBean(RecordService.class);
-
+            //TODO in work
+			RecordService recordService = (RecordService) springContext.getBean(RecordService.class);
 
             MainWindowController mainWindowController = loader.getController();
             mainWindowController.setMain(this, primaryStage);
+            mainWindowController.setRecordService(this, recordService);
             scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();

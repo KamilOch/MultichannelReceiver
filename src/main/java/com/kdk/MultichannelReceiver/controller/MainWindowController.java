@@ -1,6 +1,7 @@
 package com.kdk.MultichannelReceiver.controller;
 
 import com.kdk.MultichannelReceiver.Main;
+import com.kdk.MultichannelReceiver.dataPersist.RecordService;
 import com.kdk.MultichannelReceiver.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -23,6 +24,7 @@ import java.util.Scanner;
 public class MainWindowController implements ReceiverDataConverterListener, SpectrumWaterfallListener{
 	private Main main;
 	private Stage primaryStage;
+	RecordService recordService;
 
 	@FXML private Button addButton;
 	@FXML private Button removeBtn;
@@ -43,7 +45,8 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	
 	ReceiverDataConverter dataConverter = new ReceiverDataConverter();
 	SpectrumWaterfall spectrumWaterfall = new SpectrumWaterfall(128) ;
-	SpectrumDataProcessor spectrumProcessor = new SpectrumDataProcessor();
+
+	SpectrumDataProcessor spectrumProcessor = new SpectrumDataProcessor(recordService);
 
 	
 	public void setMain(Main main, Stage primaryStage) {
@@ -57,7 +60,20 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		dataConverter.addListener(spectrumProcessor);
 		spectrumWaterfall.addListener(this);
 	}
-	
+
+	public void setRecordService(Main main, RecordService recordService) {
+		this.main = main;
+		this.recordService=recordService;
+
+		//dodajemy s�uchaczy odbieraj�cych dane
+		dataConverter.addListener(this);
+		dataConverter.addListener(spectrumWaterfall);
+		dataConverter.addListener(spectrumProcessor);
+		spectrumWaterfall.addListener(this);
+
+	}
+
+
 	@FXML
 	public void closeStage(){
 		dataConverter.removeListener(this);
@@ -163,7 +179,8 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		//imageView = new ImageView(waterfallImage);	
 		System.out.println("new waterfallImage");
 		
-	}	
-	
-	
+	}
+
+
+
 }
