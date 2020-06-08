@@ -24,7 +24,6 @@ import java.util.Scanner;
 public class MainWindowController implements ReceiverDataConverterListener, SpectrumWaterfallListener{
 	private Main main;
 	private Stage primaryStage;
-	RecordService recordService;
 
 	@FXML private Button addButton;
 	@FXML private Button removeBtn;
@@ -45,7 +44,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	
 	ReceiverDataConverter dataConverter = new ReceiverDataConverter();
 	SpectrumWaterfall spectrumWaterfall = new SpectrumWaterfall(128) ;
-
+	RecordService recordService = new RecordService();
 	SpectrumDataProcessor spectrumProcessor = new SpectrumDataProcessor(recordService);
 
 	
@@ -64,12 +63,12 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	public void setRecordService(Main main, RecordService recordService) {
 		this.main = main;
 		this.recordService=recordService;
-
+		// TODO @Kamil nie wiem czy to tak ma byc
 		//dodajemy s�uchaczy odbieraj�cych dane
-		dataConverter.addListener(this);
-		dataConverter.addListener(spectrumWaterfall);
-		dataConverter.addListener(spectrumProcessor);
-		spectrumWaterfall.addListener(this);
+//		dataConverter.addListener(this);
+//		dataConverter.addListener(spectrumWaterfall);
+//		dataConverter.addListener(spectrumProcessor);
+//		spectrumWaterfall.addListener(this);
 
 	}
 
