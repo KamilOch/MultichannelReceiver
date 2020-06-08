@@ -7,15 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 
-    private final RecordService recordService;
+    private RecordService recordService;
     double threshold;//pr�g decyzyjny powy�ej kt�rego wszystkie przekroczenia poziomu widma traktujemy jako sygna�y uzyteczne
     //doda� wymagane zmienne na kolekcje danych
 
     @Autowired
-    public SpectrumDataProcessor(RecordService recordService) {
+    public SpectrumDataProcessor() {
         super();
         // TODO Auto-generated constructor stub
-        this.recordService = recordService;
     }
 
     //metoda do przetwarzania widma i znajdowania sygna��w powy�ej progu decyzyjnego a potem znajdowanie pik�w (wykorzysta� r�niczk�) i dla tych warto�ci maksymalnych okre�li�� cz�stotliwo�ci
@@ -56,4 +55,7 @@ public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 
     }
 
+    public void setRecordService(RecordService recordService) {
+        this.recordService= recordService;
+    }
 }

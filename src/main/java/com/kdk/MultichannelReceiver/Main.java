@@ -40,7 +40,7 @@ public class Main extends Application {
 
             MainWindowController mainWindowController = loader.getController();
             mainWindowController.setMain(this, primaryStage);
-            mainWindowController.setRecordService(this, recordService);
+            mainWindowController.setRecordService(recordService);
             scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
