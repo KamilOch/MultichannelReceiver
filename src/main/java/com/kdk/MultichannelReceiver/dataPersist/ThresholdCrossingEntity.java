@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Builder
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 
 @Entity
 @Table(name = "threshold_records")

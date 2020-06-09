@@ -1,5 +1,6 @@
 package com.kdk.MultichannelReceiver.dataPersist;
 
+import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import javax.persistence.*;
 @Builder
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 
 @Entity
 @Table(name = "received_records")
@@ -16,7 +18,7 @@ public class ReceivedRecordEntity {
     @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REC_RECORD_SEQ")
-    @Column (name = "id")
+    @Column(name = "id")
     private long id;
 
     @Column(name= "frequency")
@@ -29,7 +31,7 @@ public class ReceivedRecordEntity {
     @JoinColumn(name = "record_id", insertable = false, updatable = false, nullable = false)
     private RecordEntity recordEntity;
 
-    //@NotNull
+    @NotNull
     @Column(name = "record_id", unique = true)
     private long recordId;
 }

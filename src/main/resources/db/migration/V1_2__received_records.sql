@@ -6,7 +6,7 @@ id bigint primary key,
 
 frequency DOUBLE PRECISION not null,
 signal_level DOUBLE PRECISION not null,
-record_id BIGINT not null
+record_id bigint not null
 
 );
 
