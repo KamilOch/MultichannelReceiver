@@ -1,6 +1,7 @@
 package com.kdk.MultichannelReceiver.dataPersist;
 
 
+import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,8 +32,8 @@ public class ThresholdCrossingEntity {
     @JoinColumn(name = "record_id", insertable = false, updatable = false, nullable = false)
     private RecordEntity recordEntity;
 
-    //@NotNull
-    @Column(name = "record_id", unique = true)
+    @NotNull
+    @Column(name = "record_id")
     private long recordId;
 
 

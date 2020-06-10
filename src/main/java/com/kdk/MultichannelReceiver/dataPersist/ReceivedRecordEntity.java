@@ -32,6 +32,6 @@ public class ReceivedRecordEntity {
     private RecordEntity recordEntity;
 
     @NotNull
-    @Column(name = "record_id", unique = true)
+    @Column(name = "record_id")
     private long recordId;
 }

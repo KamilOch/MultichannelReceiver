@@ -2,6 +2,8 @@ package com.kdk.MultichannelReceiver.model;
 
 import org.apache.commons.lang3.event.EventListenerSupport;
 
+import java.sql.Timestamp;
+
 /**
  * Klasa managera umo�liwiajaca pod�aczenie klas jako s�uchaczy zdarzen
  * 
@@ -25,7 +27,11 @@ public class ReceiverDataConverter {
 		
 		int dataSize = 128;
 		int seqNumber = 1;
-		double timeStamp = 58972597;
+		//Kamil O zmiana generowania danych aby Timestamp był aktualny (uzywam go do wyszukiwania Id rekordu w DB)
+//		double timeStamp = 58972597;
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		double timeStamp = timestamp.getTime();
+
 		double freqStart = 30000000;
 		double freqStep = 10500;
 		double[] receivedData = new double[dataSize];

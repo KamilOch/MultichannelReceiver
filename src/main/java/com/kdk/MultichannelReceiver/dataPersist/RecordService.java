@@ -59,6 +59,7 @@ public class RecordService {
 
         RecordEntity newRecord = RecordEntity.builder().timeStamp(timeStamp).seqNumber(seqNumber).threshold(threshold).build();
         recordEntityRepository.save(newRecord);
+        System.out.println("zapisano record do DB");
 
         RecordEntity recordEntityFromDb = recordEntityRepository.findByTimeStamp(timeStamp);
         long idFromDB = recordEntityFromDb.getId();
@@ -66,10 +67,12 @@ public class RecordService {
         for (int i = 0; i < dataSize; i++) {
             ReceivedRecordEntity newReceivedRecordEntity = ReceivedRecordEntity.builder().frequency(frequencyTable[i]).signalLevel(receivedData[i]).recordId(idFromDB).build();
             receivedRecordEntityRepository.save(newReceivedRecordEntity);
+            System.out.println("zapisano  ReceivedRecord do DB");
 
             if (receivedData[i] > threshold) {
                 ThresholdCrossingEntity newThresholdCrossingEntity = ThresholdCrossingEntity.builder().frequency(frequencyTable[i]).signalLevel(receivedData[i]).recordId(idFromDB).build();
                 thresholdCrossingEntityRepository.save(newThresholdCrossingEntity);
+                System.out.println("zapisano  ThresholdCrossing do DB");
             }
         }
     }
