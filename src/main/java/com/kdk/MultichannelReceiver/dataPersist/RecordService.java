@@ -36,26 +36,21 @@ public class RecordService {
     private final RecordEntityRepository recordEntityRepository;
     private final ReceivedRecordEntityRepository receivedRecordEntityRepository;
     private final ThresholdCrossingEntityRepository thresholdCrossingEntityRepository;
+    private FrequencyTable frequencyTable;
 
 
     @Autowired
-    public RecordService(RecordEntityRepository recordEntityRepository, ReceivedRecordEntityRepository receivedRecordEntityRepository, ThresholdCrossingEntityRepository thresholdCrossingEntityRepository) {
+    public RecordService(RecordEntityRepository recordEntityRepository, ReceivedRecordEntityRepository receivedRecordEntityRepository, ThresholdCrossingEntityRepository thresholdCrossingEntityRepository, FrequencyTable frequencyTable) {
         this.recordEntityRepository = recordEntityRepository;
         this.receivedRecordEntityRepository = receivedRecordEntityRepository;
         this.thresholdCrossingEntityRepository = thresholdCrossingEntityRepository;
+        this.frequencyTable = frequencyTable;
     }
 
     public void addRecord(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart,
                           double freqStep, double threshold) {
 
-        //FrequencyTable frequencyTable = new FrequencyTable(dataSize, freqStart, freqStep);
-
-        double frequencyTable [] = new double[dataSize];
-        frequencyTable[0] = freqStart;
-        for (int i = 1; i < dataSize; i++) {
-            frequencyTable[i] = frequencyTable[i - 1] + freqStep;
-        }
-
+        frequencyTable.generateFrequencyTable(dataSize, freqStart, freqStep);
 
         RecordEntity newRecord = RecordEntity.builder().timeStamp(timeStamp).seqNumber(seqNumber).threshold(threshold).build();
         recordEntityRepository.save(newRecord);
@@ -65,14 +60,14 @@ public class RecordService {
         long idFromDB = recordEntityFromDb.getId();
 
         for (int i = 0; i < dataSize; i++) {
-            ReceivedRecordEntity newReceivedRecordEntity = ReceivedRecordEntity.builder().frequency(frequencyTable[i]).signalLevel(receivedData[i]).recordId(idFromDB).build();
+            ReceivedRecordEntity newReceivedRecordEntity = ReceivedRecordEntity.builder().frequency(frequencyTable.getFrequency(i)).signalLevel(receivedData[i]).recordId(idFromDB).build();
             receivedRecordEntityRepository.save(newReceivedRecordEntity);
-            System.out.println("zapisano  ReceivedRecord do DB");
+//            System.out.println("zapisano  ReceivedRecord do DB: Częstotliwość: " + frequencyTable.getFrequency(i) + " Poziom Sygnału: " + receivedData[i]);
 
             if (receivedData[i] > threshold) {
-                ThresholdCrossingEntity newThresholdCrossingEntity = ThresholdCrossingEntity.builder().frequency(frequencyTable[i]).signalLevel(receivedData[i]).recordId(idFromDB).build();
+                ThresholdCrossingEntity newThresholdCrossingEntity = ThresholdCrossingEntity.builder().frequency(frequencyTable.getFrequency(i)).signalLevel(receivedData[i]).recordId(idFromDB).build();
                 thresholdCrossingEntityRepository.save(newThresholdCrossingEntity);
-                System.out.println("zapisano  ThresholdCrossing do DB");
+//                System.out.println("zapisano  ThresholdCrossing do DB: Częstotliwość: " + frequencyTable.getFrequency(i) + " Poziom Sygnału: " + receivedData[i]);
             }
         }
     }
