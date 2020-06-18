@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 @Component
-public class MainWindowController implements ReceiverDataConverterListener, SpectrumWaterfallListener{
+public class MainWindowController implements ReceiverDataConverterListener, SpectrumWaterfallListener, SpectrumDataProcessorListener{
 	private Main main;
 	private Stage primaryStage;
 
@@ -57,6 +57,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		dataConverter.addListener(spectrumWaterfall);
 		dataConverter.addListener(spectrumProcessor);
 		spectrumWaterfall.addListener(this);
+		spectrumProcessor.addListener(this);
 	}
 
 	public void setRecordService(RecordService recordService) {
@@ -69,6 +70,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		dataConverter.removeListener(this);
 		dataConverter.removeListener(spectrumWaterfall);
 		spectrumWaterfall.removeListener(this);
+		spectrumProcessor.removeListener(this);
 		
 		
 		primaryStage.close();
@@ -171,6 +173,13 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		imageView.setImage(waterfallImage);
 		//imageView = new ImageView(waterfallImage);	
 		System.out.println("new waterfallImage");
+		
+	}
+
+	@Override
+	public void onDataProcess(double[] frequency, double[] signalLevel, int seqNumber, double timeStamp,
+			double threshold) {
+		// TODO Auto-generated method stub
 		
 	}
 
