@@ -154,6 +154,9 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		XYChart.Series dataSeries1 = new XYChart.Series();
 		dataSeries1.setName("Wykres Widma");
 		lineChart.setAnimated(false); // disable animations
+		lineChart.setCreateSymbols(false);
+		
+		
 		for(int i = 0; i<receivedData.length; i++) {
 			dataSeries1.getData().add(new XYChart.Data( Double.toString(freqStart+ i*freqStep), receivedData[i]));
 		}
