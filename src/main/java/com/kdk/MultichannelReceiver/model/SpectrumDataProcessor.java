@@ -25,6 +25,14 @@ public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 		// TODO Auto-generated constructor stub
 	}
 
+	public double getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(double threshold) {
+		this.threshold = threshold;
+	}
+	
 	// metoda do przetwarzania widma i znajdowania sygna��w powy�ej progu
 	// decyzyjnego a potem znajdowanie pik�w (wykorzysta� r�niczk�) i dla tych
 	// warto�ci maksymalnych okre�li�� cz�stotliwo�ci
