@@ -52,10 +52,10 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@FXML private BorderPane rightPane;
 	@FXML private LineChart lineChart;
 	
-	@FXML private TableView <ProcessedData> tableView;
-	@FXML private TableColumn <ProcessedData, Double> timeStampColumn;
-	@FXML private TableColumn <ProcessedData, Double> signalsNumberColumn;
-	@FXML private TableColumn <ProcessedData, Double> freqColumn;
+	@FXML private TableView <ProcessedDataForTableView> tableView;
+	@FXML private TableColumn <ProcessedDataForTableView, Double> timeStampColumn;
+	@FXML private TableColumn <ProcessedDataForTableView, Double> signalsNumberColumn;
+	@FXML private TableColumn <ProcessedDataForTableView, Double> freqColumn;
 
 	
 	
@@ -67,7 +67,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	Thread tSimulator;
 	boolean bSimulation = false;
 	
-	private ObservableList<ProcessedData> processedDataList = FXCollections.observableArrayList();
+	private ObservableList<ProcessedDataForTableView> processedDataList = FXCollections.observableArrayList();
 
 	
 	public void setMain(Main main, Stage primaryStage) {
@@ -83,13 +83,13 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		spectrumProcessor.addListener(this);
 	
 		spectrumProcessor.setThreshold(Double.parseDouble(tresholdField.getText()));
-		processedDataList.add(new ProcessedData());
+		processedDataList.add(new ProcessedDataForTableView());
 		tableView.setItems(processedDataList);
 		
 		
-		timeStampColumn.setCellValueFactory(new PropertyValueFactory<ProcessedData, Double>("timeStamp"));
-		signalsNumberColumn.setCellValueFactory(new PropertyValueFactory<ProcessedData, Double>("signalLevel"));
-		freqColumn.setCellValueFactory(new PropertyValueFactory<ProcessedData, Double>("frequency"));
+		timeStampColumn.setCellValueFactory(new PropertyValueFactory<ProcessedDataForTableView, Double>("timeStamp"));
+		signalsNumberColumn.setCellValueFactory(new PropertyValueFactory<ProcessedDataForTableView, Double>("signalLevel"));
+		freqColumn.setCellValueFactory(new PropertyValueFactory<ProcessedDataForTableView, Double>("frequency"));
 
 
 		
@@ -299,7 +299,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		processedDataList.clear();
 		
 		for(int i = 0; i< frequency.length; i++) {
-			ProcessedData tmpData = new ProcessedData();
+			ProcessedDataForTableView tmpData = new ProcessedDataForTableView();
 			tmpData.setFrequency(frequency[i]);
 			tmpData.setSeqNumbe(seqNumber);
 			tmpData.setSignalLevel(signalLevel[i]);
