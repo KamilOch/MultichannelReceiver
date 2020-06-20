@@ -13,11 +13,18 @@ import java.sql.Timestamp;
 public class ReceiverDataConverter {
 	
 	private static final EventListenerSupport<ReceiverDataConverterListener> receiverDataConverterListeners = new EventListenerSupport<>(ReceiverDataConverterListener.class);
-
+	int repetitionCounter;
+	int fixedFreq;
+	
+	
 	/**
      * Konstruktor
      */  
 	public void ReceiverDataConverter() {
+		repetitionCounter = 0;
+		fixedFreq = 0;
+	
+		
 		
 	}
 	/**
@@ -25,19 +32,43 @@ public class ReceiverDataConverter {
      */  
 	public void convertData() {
 		
-		int dataSize = 128;
+		int dataSize = 256;
 		int seqNumber = 1;
 		//Kamil O zmiana generowania danych aby Timestamp był aktualny (uzywam go do wyszukiwania Id rekordu w DB)
 //		double timeStamp = 58972597;
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		double timeStamp = timestamp.getTime();
+		double timeStamp = timestamp.getTime();	
+
 
 		double freqStart = 30000000;
 		double freqStep = 10500;
 		double[] receivedData = new double[dataSize];
 		
 		for(int i = 0; i<receivedData.length; i++) {
-			receivedData[i] = 100 * Math.random();		
+			double rndnumb = 10 * Math.random();
+			receivedData[i] = (rndnumb>9.95) ? rndnumb + 90 * Math.random(): rndnumb;	
+			
+			if(i == 45) {
+				if(repetitionCounter<20) {					
+					receivedData[i] = 90 + 5 * Math.random();//stały sygnał na tej samej częstotliwosći					
+					repetitionCounter++;
+				}
+				else {
+					//losowanie
+					if(100 * Math.random()>95) {
+						repetitionCounter = 0;
+						fixedFreq = (int)Math.abs(Math.round(dataSize*Math.random()));
+					}
+				}
+			}
+			if(i == fixedFreq) {
+				if(repetitionCounter<20) {					
+					receivedData[i] = 90 + 5 * Math.random();//stały sygnał na tej samej częstotliwosći					
+				}
+			
+			}
+			
+			
 		}
 		 
 		

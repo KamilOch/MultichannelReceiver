@@ -10,15 +10,25 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.stereotype.Component;
+
+
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Scanner;
+
 
 @Component
 public class MainWindowController implements ReceiverDataConverterListener, SpectrumWaterfallListener, SpectrumDataProcessorListener{
@@ -32,6 +42,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@FXML private Button reportBtn;	
 	@FXML private Button chartButton;	
 	
+	@FXML private TextField tresholdField;
 	@FXML private TextField firstNameField;
 	@FXML private TextField lastNameField;
 	@FXML private TextField roomField;
@@ -41,10 +52,22 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@FXML private BorderPane rightPane;
 	@FXML private LineChart lineChart;
 	
+	@FXML private TableView <ProcessedData> tableView;
+	@FXML private TableColumn <ProcessedData, Double> timeStampColumn;
+	@FXML private TableColumn <ProcessedData, Double> signalsNumberColumn;
+	@FXML private TableColumn <ProcessedData, Double> freqColumn;
+
+	
 	
 	ReceiverDataConverter dataConverter = new ReceiverDataConverter();
-	SpectrumWaterfall spectrumWaterfall = new SpectrumWaterfall(128) ;
+	SpectrumWaterfall spectrumWaterfall = new SpectrumWaterfall(256) ;
 	SpectrumDataProcessor spectrumProcessor = new SpectrumDataProcessor();
+	
+	
+	Thread tSimulator;
+	boolean bSimulation = false;
+	
+	private ObservableList<ProcessedData> processedDataList = FXCollections.observableArrayList();
 
 	
 	public void setMain(Main main, Stage primaryStage) {
@@ -58,6 +81,50 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		dataConverter.addListener(spectrumProcessor);
 		spectrumWaterfall.addListener(this);
 		spectrumProcessor.addListener(this);
+	
+		spectrumProcessor.setThreshold(Double.parseDouble(tresholdField.getText()));
+		processedDataList.add(new ProcessedData());
+		tableView.setItems(processedDataList);
+		
+		
+		timeStampColumn.setCellValueFactory(new PropertyValueFactory<ProcessedData, Double>("timeStamp"));
+		signalsNumberColumn.setCellValueFactory(new PropertyValueFactory<ProcessedData, Double>("signalLevel"));
+		freqColumn.setCellValueFactory(new PropertyValueFactory<ProcessedData, Double>("frequency"));
+
+
+		
+
+		lineChart.setAnimated(false); // disable animations
+		lineChart.setCreateSymbols(false);
+		lineChart.getYAxis().setAnimated(false);
+		lineChart.getXAxis().setAnimated(false);
+		lineChart.getYAxis().setMaxHeight(120);
+		lineChart.getYAxis().setAutoRanging(false);
+		
+		
+	
+		tresholdField.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+	        if (newPropertyValue) {
+
+	        } else {
+	            if (tresholdField.getText().isEmpty() || tresholdField.getText() == null
+	                    || Integer.parseInt(tresholdField.getText()) > 100) {
+	            	tresholdField.setText("100");
+	            }
+	            System.out.println("tresholdField 1 out focus " + tresholdField.getText());
+	            spectrumProcessor.setThreshold(Double.parseDouble(tresholdField.getText()));
+	        }
+
+	    });
+		
+		tresholdField.setOnKeyPressed(event->{
+			KeyCode keyCode = event.getCode();
+			if(keyCode==KeyCode.ENTER) {
+				System.out.println("tresholdField changed" + tresholdField.getText());
+				spectrumProcessor.setThreshold(Double.parseDouble(tresholdField.getText()));
+			}
+		});
+		
 	}
 
 	public void setRecordService(RecordService recordService) {
@@ -67,6 +134,18 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 
 	@FXML
 	public void closeStage(){
+		
+		if (bSimulation) {
+			tSimulator.interrupt();
+			try {
+				tSimulator.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			bSimulation = false;
+		}
+		
 		dataConverter.removeListener(this);
 		dataConverter.removeListener(spectrumWaterfall);
 		spectrumWaterfall.removeListener(this);
@@ -83,6 +162,10 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	public void initialize() {
 		;
 	}
+
+	
+
+
 	
 	@FXML 
 	public void addBtnHandle(){
@@ -139,8 +222,37 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	
 	@FXML
 	public void chartBtnHandler() {	
-		//generowanie losowych danych i przekazywanie ich do klas nas�uchuj�cych 
-		dataConverter.convertData();		
+		
+		if(bSimulation) {//wyłączenie symulacji
+			tSimulator.interrupt(); 
+			try {
+				tSimulator.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			bSimulation = false;
+		}
+		else {
+			Runnable runnableDataSimulator = () -> {
+				boolean End = false;
+				try {
+					while (!End) {
+						Platform.runLater(()->dataConverter.convertData());
+						Thread.sleep(100);
+					}
+				} catch (InterruptedException e) {
+					System.out.println("\nInterrupted from main, Simulation Stop");
+					End = true;
+				}
+			};
+			
+			tSimulator = new Thread(runnableDataSimulator);
+			tSimulator.start();// generowanie losowych danych i przekazywanie ich do klas nas�uchuj�cych
+			bSimulation = true;
+
+			
+		}	
 	}
 
 	@Override
@@ -153,12 +265,10 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	public void onDataReceived(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart,
 			double freqStep) {		
 		//przyk�adowe wy�wietleie danych
+		
+
 		XYChart.Series dataSeries1 = new XYChart.Series();
 		dataSeries1.setName("Wykres Widma");
-		lineChart.setAnimated(false); // disable animations
-		lineChart.setCreateSymbols(false);
-		
-		
 		for(int i = 0; i<receivedData.length; i++) {
 			dataSeries1.getData().add(new XYChart.Data( Double.toString(freqStart+ i*freqStep), receivedData[i]));
 		}
@@ -170,7 +280,9 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@Override
 	public void onImageProcessed(WritableImage waterfallImage, int seqNumber, double timeStamp, double freqStart,
 			double freqStep) {
+		
 		imageView.setImage(waterfallImage);
+		imageView.setFitWidth(lineChart.getWidth());
 		//imageView = new ImageView(waterfallImage);	
 		System.out.println("new waterfallImage");
 		
@@ -181,7 +293,30 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 			double threshold) {
 		// TODO Auto-generated method stub
 		
+		
+		System.out.println("onDataProcess, frequency.lenght: "  + frequency.length + " signalLevel.lenght: " + signalLevel.length);
+		
+		processedDataList.clear();
+		
+		for(int i = 0; i< frequency.length; i++) {
+			ProcessedData tmpData = new ProcessedData();
+			tmpData.setFrequency(frequency[i]);
+			tmpData.setSeqNumbe(seqNumber);
+			tmpData.setSignalLevel(signalLevel[i]);
+			tmpData.setThreshold(threshold);
+			tmpData.setTimeStamp(timeStamp);			
+			processedDataList.add(tmpData);
+		}
+	
+		
+		
 	}
+	
+	
+		
+		
+		
+	
 
 
 

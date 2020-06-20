@@ -81,9 +81,9 @@ public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 
 		for (int i = 0; i < list.size(); i++) {
 			frequency[i] = list.get(i).getFrequency();
-			System.out.println("Czestotlowosc= " + list.get(i).getFrequency());
+			//System.out.println("Czestotlowosc= " + list.get(i).getFrequency());
 			signalLevel[i] = list.get(i).getSignalLevel();
-			System.out.println("Poziom sygnału= " + list.get(i).getSignalLevel());
+			//System.out.println("Poziom sygnału= " + list.get(i).getSignalLevel());
 		}
 
 		spectrumDataProcessorListener.fire().onDataProcess(frequency, signalLevel, seqNumber, timeStamp, threshold);

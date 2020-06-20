@@ -15,7 +15,7 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 	PixelReader reader;
 	int waterfallLength;
 	int lastImageLineToWrite;
-	int maxImageLines = 100;
+	int maxImageLines = 150;
 	private static final EventListenerSupport<SpectrumWaterfallListener> spectrumWaterfallListeners = new EventListenerSupport<>(
 			SpectrumWaterfallListener.class);
 
@@ -93,17 +93,19 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 			// Writing the color of the image
 			fillImageLine(receivedData);
 
-			if (lastImageLineToWrite == maxImageLines - 1)
+			if (lastImageLineToWrite == maxImageLines-1) {
+				fillImageLine(receivedData);
 				copyImage();
+			}
 
 		}
 		// utworznie nowego obrazu
 		else {
-			waterfallLength = dataSize;
+			this.waterfallLength = dataSize;
 
 			// Creating a writable image
-			waterfallImage = new WritableImage(waterfallLength, maxImageLines);
-			writer = waterfallImage.getPixelWriter();
+			this.waterfallImage = new WritableImage(waterfallLength, maxImageLines);
+			this.writer = waterfallImage.getPixelWriter();
 			// Writing the color of the image
 			fillImageLine(receivedData);
 		}
@@ -130,41 +132,18 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 	}
 
 	public void copyImage() {
-		int height = maxImageLines;
-		int width = waterfallLength;
+		int height = this.maxImageLines;
+		int width = this.waterfallLength;
 
 		for (int y = 1; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				Color color = reader.getColor(x, y);// from
-				writer.setColor(x, y - 1, color);
+				this.writer.setColor(x, y - 1, color);
 			}
 		}
 
 	}
 
-//	@Override
-//	public void onDataReceived(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart,
-//			double freqStep) {
-//
-//		// dopisywanie danych do waterfallImage
-//		if (dataSize == waterfallLength) {
-//			// Writing the color of the image
-//			fillImageLine(receivedData);
-//		}
-//		// utworznie nowego obrazu
-//		else {
-//			waterfallLength = dataSize;
-//
-//			// Creating a writable image
-//			waterfallImage = new WritableImage(waterfallLength, maxImageLines);
-//			writer = waterfallImage.getPixelWriter();
-//			// Writing the color of the image
-//			fillImageLine(receivedData);
-//		}
-//
-//		// przekazanie obrazu do klasy wy�wietlaj�cej
-//		spectrumWaterfallListeners.fire().onImageProcessed(waterfallImage, seqNumber, timeStamp, freqStart, freqStep);
-//
-//	}
+
 
 }
