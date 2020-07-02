@@ -19,7 +19,6 @@ public class FrequencyTable {
         for (int i = 1; i < dataSize; i++) {
             frequency[i] = frequency[i - 1] + freqStep;
         }
-        System.out.println("FrequencyTable wielkosc: " + frequency.length);
     }
 
     public double getFrequency(int element) {

@@ -35,7 +35,6 @@ public class Main extends Application {
             primaryStage.setMinHeight(600.00);
             Scene scene = new Scene(pane);
 
-            //TODO in work
 			RecordService recordService = (RecordService) springContext.getBean(RecordService.class);
 
             MainWindowController mainWindowController = loader.getController();

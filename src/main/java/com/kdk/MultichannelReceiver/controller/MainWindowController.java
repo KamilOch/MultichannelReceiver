@@ -294,7 +294,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		// TODO Auto-generated method stub
 		
 		
-		System.out.println("onDataProcess, frequency.lenght: "  + frequency.length + " signalLevel.lenght: " + signalLevel.length);
+		System.out.println("onDataProcessed, frequency.lenght: "  + frequency.length + " signalLevel.lenght: " + signalLevel.length);
 		
 		processedDataList.clear();
 		

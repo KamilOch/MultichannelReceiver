@@ -14,7 +14,6 @@ public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 	private RecordService recordService;
 	double threshold;// pr�g decyzyjny powy�ej kt�rego wszystkie przekroczenia poziomu widma
 						// traktujemy jako sygna�y uzyteczne
-	// doda� wymagane zmienne na kolekcje danych
 	private static final EventListenerSupport<SpectrumDataProcessorListener> spectrumDataProcessorListener = new EventListenerSupport<>(
 			SpectrumDataProcessorListener.class);
 
@@ -41,14 +40,8 @@ public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 	@Override
 	public void onDataReceived(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart,
 			double freqStep) {
-		// TODO Auto-generated method stub
-		// tutaj odbieramy i przetwarzamy dane widma
 
-
-		// tutaj odbieramy i przetwarzamy dane widma : double receivedData , double
-		// frequency, double signalLevel, int seqNumber, double timeStamp, double
-		// threshold
-		// dorobui� zapis wynik�w do bazy danych
+		// serwis analizujacy i zapisujacy dane do bazy
 		List<ThresholdCrossingEntity> actualThresholdList = recordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
 
 		double[] frequency = new double[actualThresholdList.size()];
@@ -56,14 +49,10 @@ public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 
 		for (int i = 0; i < actualThresholdList.size(); i++) {
 			frequency[i] = actualThresholdList.get(i).getFrequency();
-			//System.out.println("Czestotlowosc= " + list.get(i).getFrequency());
 			signalLevel[i] = actualThresholdList.get(i).getSignalLevel();
-			//System.out.println("Poziom sygnału= " + list.get(i).getSignalLevel());
 		}
-		// TODO wyslać tylko przefiltrowane dane!!!
-		// przekazanie danych do klasy wyświetlającej
-		// wynik poprosz�e zwr�ci� w zdarzeniu zwrotnym do klasy kontrolera (podobnie
-		// jak w SpectrumWateerfall)
+		
+		// przekazanie danych do klasy wyświetlającej		
 		spectrumDataProcessorListener.fire().onDataProcessed(frequency, signalLevel, seqNumber, timeStamp, threshold);
 
 	}
