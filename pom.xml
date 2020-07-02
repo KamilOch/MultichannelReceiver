@@ -41,21 +41,15 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.projectlombok</groupId> -->
-<!-- 			<artifactId>lombok</artifactId> -->
-<!-- 			<optional>true</optional> -->
-<!-- 		</dependency> -->
-		
+
 		 <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>1.18.12</version>
         <scope>provided</scope>
     </dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -74,6 +68,11 @@
 		<groupId>org.springframework.data</groupId>
 		<artifactId>spring-data-rest-core</artifactId>
 	</dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
 
 	<!--moje importy koniec!!!!-->
 	</dependencies>
