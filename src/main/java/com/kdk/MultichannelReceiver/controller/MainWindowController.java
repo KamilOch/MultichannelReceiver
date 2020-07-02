@@ -289,8 +289,8 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	}
 
 	@Override
-	public void onDataProcess(double[] frequency, double[] signalLevel, int seqNumber, double timeStamp,
-			double threshold) {
+	public void onDataProcessed(double[] frequency, double[] signalLevel, int seqNumber, double timeStamp,
+                                double threshold) {
 		// TODO Auto-generated method stub
 		
 		
