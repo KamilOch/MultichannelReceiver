@@ -62,7 +62,6 @@
 			</exclusions>
 		</dependency>
 
-
 	<!--moje importy start!!!!-->
 	<dependency>
 		<groupId>org.springframework.data</groupId>
@@ -73,8 +72,18 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-	<!--moje importy koniec!!!!-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!--moje importy koniec!!!!-->
 	</dependencies>
 
 	<build>
