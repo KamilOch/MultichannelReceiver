@@ -136,4 +136,29 @@ public class RecordService {
                 .build());
 
     }
+
+    public List<ReceivedRecordEntity> getReceivedRecordByRecordId(long recordId) {
+        return receivedRecordEntityRepository.findByRecordId(recordId)
+                .stream()
+                .map(it -> ReceivedRecordEntity.builder()
+                        .id(it.getId())
+                        .frequency(it.getFrequency())
+                        .signalLevel(it.getSignalLevel())
+                        .recordId(it.getRecordId())
+                        .build())
+                .collect(Collectors.toList());
+
+    }
+
+    public List<ThresholdCrossingEntity> getThresholdCrossingRecordByRecordId(long recordId) {
+        return thresholdCrossingEntityRepository.findByRecordId(recordId)
+                .stream()
+                .map(it -> ThresholdCrossingEntity.builder()
+                        .id(it.getId())
+                        .frequency(it.getFrequency())
+                        .signalLevel(it.getSignalLevel())
+                        .recordId(it.getRecordId())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }

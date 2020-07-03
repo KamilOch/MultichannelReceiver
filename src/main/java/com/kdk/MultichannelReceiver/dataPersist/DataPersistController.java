@@ -47,6 +47,15 @@ public class DataPersistController {
         recordService.deleteRecordByTimeStamp(timeStamp);
     }
 
+    @GetMapping("/getReceivedRecordByRecordId/{recordId}")
+    public List<ReceivedRecordEntity> getReceivedRecordByRecordId(@PathVariable long recordId) {
+       return recordService.getReceivedRecordByRecordId(recordId);
+    }
+
+    @GetMapping("/getThresholdCrossingRecordByRecordId/{recordId}")
+    public List<ThresholdCrossingEntity> getThresholdCrossingRecordByRecordId(@PathVariable long recordId) {
+        return recordService.getThresholdCrossingRecordByRecordId(recordId);
+    }
 
 }
 
