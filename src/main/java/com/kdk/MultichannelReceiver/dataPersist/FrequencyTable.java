@@ -24,4 +24,8 @@ public class FrequencyTable {
     public double getFrequency(int element) {
         return frequency[element];
     }
+
+    public double[] getFrequency() {
+        return frequency.clone();
+    }
 }

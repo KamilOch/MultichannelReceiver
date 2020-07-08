@@ -52,10 +52,19 @@ public class DataPersistController {
        return recordService.getReceivedRecordByRecordId(recordId);
     }
 
+    @GetMapping("/getReceivedRecordOneRawByRecordId/{recordId}")
+    public ReceivedRecordOneRowEntity getReceivedRecordOneRawByRecordId(@PathVariable long recordId) {
+        return recordService.getReceivedRecordOneRawByRecordId(recordId);
+    }
+
     @GetMapping("/getThresholdCrossingRecordByRecordId/{recordId}")
     public List<ThresholdCrossingEntity> getThresholdCrossingRecordByRecordId(@PathVariable long recordId) {
         return recordService.getThresholdCrossingRecordByRecordId(recordId);
     }
 
+    @GetMapping("/getThresholdCrossingRecordOneRawByRecordId/{recordId}")
+    public ThresholdCrossingOneRawEntity getThresholdCrossingRecordOneRawByRecordId(@PathVariable long recordId) {
+        return recordService.getThresholdCrossingRecordOneRawByRecordId(recordId);
+    }
 }
 

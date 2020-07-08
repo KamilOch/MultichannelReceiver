@@ -1,12 +1,10 @@
 package com.kdk.MultichannelReceiver.model;
 
 import com.kdk.MultichannelReceiver.dataPersist.RecordService;
-import com.kdk.MultichannelReceiver.dataPersist.ThresholdCrossingEntity;
+import com.kdk.MultichannelReceiver.dataPersist.ThresholdsTables;
 import org.apache.commons.lang3.event.EventListenerSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class SpectrumDataProcessor implements ReceiverDataConverterListener {
@@ -42,18 +40,20 @@ public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 			double freqStep) {
 
 		// serwis analizujacy i zapisujacy dane do bazy
-		List<ThresholdCrossingEntity> actualThresholdList = recordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
+//		List<ThresholdCrossingEntity> actualThresholdList = recordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
+		ThresholdsTables actualThresholdList = recordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
 
-		double[] frequency = new double[actualThresholdList.size()];
-		double[] signalLevel = new double[actualThresholdList.size()];
-
-		for (int i = 0; i < actualThresholdList.size(); i++) {
-			frequency[i] = actualThresholdList.get(i).getFrequency();
-			signalLevel[i] = actualThresholdList.get(i).getSignalLevel();
-		}
+//		double[] frequency = new double[actualThresholdList.size()];
+//		double[] signalLevel = new double[actualThresholdList.size()];
+//
+//		for (int i = 0; i < actualThresholdList.size(); i++) {
+//			frequency[i] = actualThresholdList.get(i).getFrequency();
+//			signalLevel[i] = actualThresholdList.get(i).getSignalLevel();
+//		}
 		
 		// przekazanie danych do klasy wyświetlającej		
-		spectrumDataProcessorListener.fire().onDataProcessed(frequency, signalLevel, seqNumber, timeStamp, threshold);
+//		spectrumDataProcessorListener.fire().onDataProcessed(frequency, signalLevel, seqNumber, timeStamp, threshold);
+		spectrumDataProcessorListener.fire().onDataProcessed(actualThresholdList.getFrequency(), actualThresholdList.getSignal(), seqNumber, timeStamp, threshold);
 
 	}
 
