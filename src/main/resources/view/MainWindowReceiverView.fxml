@@ -5,10 +5,16 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,56 +22,128 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kdk.MultichannelReceiver.controller.MainWindowController">
+<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kdk.MultichannelReceiver.controller.MainWindowController">
    <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="Plik">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Wczytaj plik" />
+                  <MenuItem mnemonicParsing="false" text="Zakończ" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Odbiornik">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Ustawienia" />
+                  <MenuItem mnemonicParsing="false" text="Połącz" />
+                  <MenuItem mnemonicParsing="false" text="Rozłącz" />
+              </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Widok">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Opcje widoku" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Pomoc">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Pomoc" />
+                  <MenuItem mnemonicParsing="false" text="O programie" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
       <BorderPane fx:id="rightPane" layoutX="450.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
-         <top>
-            <LineChart fx:id="lineChart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="573.0" BorderPane.alignment="TOP_LEFT">
-              <xAxis>
-                <CategoryAxis side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis side="LEFT" />
-              </yAxis>
-            </LineChart>
-         </top>
          <center>
-            <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true" translateX="-160.0" translateY="-100.0" BorderPane.alignment="CENTER_LEFT">
-               <BorderPane.margin>
-                  <Insets left="200.0" top="100.0" />
-               </BorderPane.margin>
-            </ImageView>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <LineChart fx:id="lineChart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="573.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Marker [Mhz]">
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="fMarkerField" text="0" />
+                     </children>
+                  </HBox>
+                  <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets left="42.0" />
+                     </VBox.margin>
+                  </ImageView>
+               </children>
+            </VBox>
          </center>
          <bottom>
-            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="TOP_LEFT">
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
                   <Label text="Próg detekcji [dBm]">
                      <font>
                         <Font size="14.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets left="20.0" right="10.0" />
+                     </HBox.margin>
                   </Label>
                   <TextField fx:id="tresholdField" prefWidth="50.0" text="95" />
-                  <Label text="Częstotliwość początkowa [Hz]">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="firstNameField" prefWidth="80.0" />
-                  <Label text="Częstotliwość końcowa[Hz]">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="comingHourField" prefWidth="80.0" />
-                  <Label layoutX="320.0" layoutY="10.0" text="Rozdzielczość[Hz]">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="comingHourField1" layoutX="463.0" layoutY="10.0" prefWidth="80.0" />
                </children>
             </HBox>
          </bottom>
+         <right>
+            <VBox prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="F start[MHz]">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="fStartField" prefWidth="80.0" text="0" />
+                  <Label text="F stop [MHz]">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="fStopField" prefWidth="80.0">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin></TextField>
+                  <Label text="F step [Hz]">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="fStepField" prefWidth="80.0">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin></TextField>
+                  <Separator prefWidth="200.0" />
+                  <CheckBox mnemonicParsing="false" text="Pauza wyświetlania">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </CheckBox>
+                  <Separator prefWidth="200.0" />
+                  <Separator layoutX="10.0" layoutY="257.0" prefWidth="200.0" />
+               </children>
+            </VBox>
+         </right>
       </BorderPane>
       <BorderPane prefHeight="600.0" prefWidth="450.0" AnchorPane.topAnchor="20.0">
          <left>
@@ -76,27 +154,27 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="saveFileBtn" mnemonicParsing="false" onAction="#saveFileHandler" prefHeight="25.0" prefWidth="80.0" text="Zapisz">
+                  <Button fx:id="saveFileBtn" mnemonicParsing="false" onAction="#saveFileHandler" prefHeight="25.0" prefWidth="80.0" text="Zapisuj">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addBtnHandle" prefHeight="25.0" prefWidth="80.0" text="Dodaj">
+                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addBtnHandle" prefHeight="25.0" prefWidth="80.0" text="Odbieraj">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="removeBtn" mnemonicParsing="false" onAction="#removeBtnHandle" prefHeight="25.0" prefWidth="80.0" text="Usuń">
+                  <Button fx:id="removeBtn" mnemonicParsing="false" onAction="#removeBtnHandle" prefHeight="25.0" prefWidth="80.0" text="Baza danych">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="chartButton" mnemonicParsing="false" onAction="#chartBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Wykres">
+                  <Button fx:id="chartButton" mnemonicParsing="false" onAction="#chartBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Demo">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="80.0" text="Zamknij">
+                  <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="80.0" text="Zakończ">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -108,21 +186,46 @@
             </VBox>
          </left>
          <center>
-            <TableView fx:id="tableView" maxWidth="350.0" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
-              <columns>
-                <TableColumn fx:id="timeStampColumn" maxWidth="200.0" prefWidth="100.0" text="Timestamp" />
-                <TableColumn fx:id="signalsNumberColumn" maxWidth="200.0" prefWidth="100.0" text="Poziom sygnału [dBm]" />
-                  <TableColumn fx:id="freqColumn" maxWidth="200.0" prefWidth="100.0" text="Częstotliwość [Hz]" />
-              </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
-            </TableView>
+            <VBox prefHeight="200.0" BorderPane.alignment="TOP_CENTER">
+               <children>
+                  <Label text="Wykryte częstotliwości (poj. rekord)">
+                     <VBox.margin>
+                        <Insets left="80.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView fx:id="tableView" maxHeight="-Infinity" maxWidth="350.0" prefHeight="200.0" prefWidth="150.0">
+                    <columns>
+                      <TableColumn fx:id="timeStampColumn" maxWidth="200.0" prefWidth="100.0" text="Timestamp" />
+                      <TableColumn fx:id="signalsNumberColumn" maxWidth="200.0" prefWidth="100.0" text="Poziom sygnału [dBm]" />
+                        <TableColumn fx:id="freqColumn" maxWidth="200.0" prefWidth="100.0" text="Częstotliwość [Hz]" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <Separator prefWidth="200.0" />
+                  <Label text="Wykryte sygnały (okno)">
+                     <VBox.margin>
+                        <Insets left="80.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView prefWidth="200.0">
+                    <columns>
+                      <TableColumn fx:id="lpColumn" prefWidth="29.0" text="Lp.." />
+                      <TableColumn fx:id="siognalTypeColumn" prefWidth="121.0" text="Typ syganłu" />
+                        <TableColumn fx:id="signalFreqColumn" prefWidth="98.0" text="Częstotliwość" />
+                        <TableColumn fx:id="signalDurationColumn" prefWidth="100.0" text="Czas trwania" />
+                    </columns>
+                  </TableView>
+               </children>
+            </VBox>
          </center>
       </BorderPane>
-      <BorderPane />
+      <ToolBar prefHeight="40.0" prefWidth="1280.0" AnchorPane.topAnchor="780.0">
+         <items>
+            <Label text="Tu będą się wyświetlać informacje statusowe" />
+            <TextField />
+         </items>
+      </ToolBar>
    </children>
 </AnchorPane>
