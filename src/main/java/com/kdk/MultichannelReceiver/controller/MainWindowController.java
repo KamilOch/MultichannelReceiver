@@ -153,6 +153,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		
 		
 		primaryStage.close();
+		System.exit(0);
 	}
 	
 	private void setTable() {
