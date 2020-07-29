@@ -159,7 +159,7 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addBtnHandle" prefHeight="25.0" prefWidth="80.0" text="Odbieraj">
+                  <Button fx:id="receiveButton" mnemonicParsing="false" onAction="#receiveBtnHandle" prefHeight="25.0" prefWidth="80.0" text="Odbieraj">
                      <font>
                         <Font size="14.0" />
                      </font>
