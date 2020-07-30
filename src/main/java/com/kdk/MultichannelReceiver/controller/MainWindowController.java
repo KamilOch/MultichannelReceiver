@@ -45,19 +45,20 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	private Main main;
 	private Stage primaryStage;
 
-	@FXML private Button receiveButton;
-	@FXML private Button removeBtn;
 	@FXML private Button loadFileBtn;
 	@FXML private Button saveFileBtn;
-	@FXML private Button reportBtn;	
-	@FXML private Button chartButton;	
+	@FXML private Button receiveBtn;
+	@FXML private Button databaseBtn;
+	@FXML private Button demoChartBtn;	
+	@FXML private Button closeStageBtn;	
 	
 	@FXML private TextField tresholdField;
-	@FXML private TextField firstNameField;
-	@FXML private TextField lastNameField;
-	@FXML private TextField roomField;
-	@FXML private TextField comingHourField;
-	@FXML private TextField leavingHourField;
+	@FXML private TextField fMarkerField;
+	@FXML private TextField fStartField;
+	@FXML private TextField fStopField;
+	@FXML private TextField fStepField;
+	@FXML private TextField seqNumberField;
+	@FXML private TextField timeStampField;
 	@FXML private ImageView imageView;
 	@FXML private BorderPane rightPane;
 	@FXML private LineChart lineChart;
@@ -156,7 +157,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 
 
 	@FXML
-	public void closeStage(){
+	public void closeStageBtnHandler(){
 		
 		if (bSimulation) {
 			tSimulator.interrupt();
@@ -192,14 +193,14 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 
 	
 	@FXML 
-	public void receiveBtnHandle(){
+	public void receiveBtnHandler(){
 		
 		if(bReception) {//zatrzymanie odbioru
 			udpClientThread.interrupt();
 			try {
 				udpClientThread.join();
 				System.out.println("UDPClient stopped");
-				receiveButton.setText("Odbieraj");
+				receiveBtn.setText("Odbieraj");
 				
 				//dataConverter.stopReceiving();
 				
@@ -219,7 +220,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 				udpClientThread = new ReceiverUDPClient("localhost", 4445, spectrumDataPacket, dataConverter, blockingSpectrumDataQueue);
 				udpClientThread.start();
 				System.out.println("UDPClient started");
-				receiveButton.setText("Zatrzymaj");
+				receiveBtn.setText("Zatrzymaj");
 				bReception = true;
 				
 				//dataConverter.startReceiving();
@@ -233,8 +234,11 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		
 
 	}
+	//wczytuje dane nieprzetworzone z bazy danych i uruchamia ich odtwarzanie 
+	//ponowne naciśniecie zatrzymuj odtwarzanie
+	
 	@FXML 
-	public void removeBtnHandle(){
+	public void databaseBtnHandler(){
 		;
 	}
 	@FXML
@@ -275,13 +279,10 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	public void saveFileHandler() {
 		;
 	}
-	@FXML
-	public void reportHandler() {		
-		;		
-	}	
 	
+	//wyświetla dane lokalnie generowane losowo 
 	@FXML
-	public void chartBtnHandler() {	
+	public void demoChartBtnHandler() {	
 		
 		if(bSimulation) {//wyłączenie symulacji
 			tSimulator.interrupt(); 
@@ -326,7 +327,10 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 			double freqStep) {		
 		//przyk�adowe wy�wietleie danych
 		System.out.println("lineChart - onDataReceived");
-		
+		seqNumberField.setText(Integer.toString(seqNumber));
+		timeStampField.setText(Double.toString(timeStamp));
+		fStartField.setText(Double.toString(freqStart));
+		fStepField.setText(Double.toString(freqStep));
 		
 //		Task task = new Task<Void> () {
 //		    @Override public Void call() {
