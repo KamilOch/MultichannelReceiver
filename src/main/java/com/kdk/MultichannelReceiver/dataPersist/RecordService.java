@@ -6,6 +6,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/***
+ * Klasa zajmujaca się przetwarzaniem odebranych danych pomiarowych
+ * i zapisem ich do odpowiednich repozytoriów oraz odczytem z repozutoriów
+ * @author Kamil Ochnik
+ */
 @Component
 public class RecordService {
 
@@ -15,11 +20,22 @@ public class RecordService {
     private final FrequencyTable frequencyTable;
     private final List<ThresholdCrossingEntity> thresholdCrossingEntityList;
 
-    //UWAGA testowanie opcji zapisu do bazy danych (v2)
+    //UWAGA testowanie opcji zapisu do bazy danych (v2) zapis w 1 linii (krotce)
     private final ReceivedRecordOneRawEntityRepository receivedRecordOneRawEntityRepository;
     private final ThresholdCrossingEntityOneRawRepository thresholdCrossingEntityOneRawRepository;
     private ThresholdsTables thresholdsTables;
 
+    /***
+     * Konstruktor Klasy.
+     * @param recordEntityRepository repozytorium zapisanych pomiarów
+     * @param receivedRecordEntityRepository repozytorium zapisanych rekordów
+     * @param thresholdCrossingEntityRepository repozytorium zapisanych rekordów które przekraczają próg
+     * @param frequencyTable tabela częstotliwości
+     * @param thresholdCrossingEntityList lista obiektów które przekraczają próg
+     * @param receivedRecordOneRawEntityRepository repozytorium zapisanych rekordów, zapis w 1 linii (krotce)
+     * @param thresholdCrossingEntityOneRawRepository repozytorium zapisanych rekordów które przekraczają próg, zapis w 1 linii (krotce)
+     * @param thresholdsTables tabela przekroczeń progu
+     */
     @Autowired
     public RecordService(RecordEntityRepository recordEntityRepository,
                          ReceivedRecordEntityRepository receivedRecordEntityRepository,
@@ -34,6 +50,22 @@ public class RecordService {
         this.thresholdsTables = thresholdsTables;
     }
 
+    /***
+     * Metoda zapisujaca do repozytorium:pojedynczy pomiar,
+     * rekord zawierajacy wszystkie odebrane czestotliwosci i poziomy sygnalu,
+     * rekord zawierajacy tylko czestotliwości których poziom sygnału przekraczaja próg.
+     * @param receivedData tablica zawierajaca poziomy sygnałów
+     * @param dataSize ilość częstotliwości
+     * @param seqNumber numer sekwencji
+     * @param timeStamp znacznik czasu
+     * @param freqStart początkowa częstotliwość
+     * @param freqStep krok miedzy czestotliwosciami
+     * @param threshold próg detekcji
+     * @return metoda zwraca obiekt zawierający dwie tablice
+     * (tablicę czestotliwosci i analogicznie tablicę poziomów sygnału)
+     * w ktorych znajdują się tylko cześstotliwośći które przekroczyły próg,
+     * tablicę czestotliwosci i analogicznie tablicę poziomów sygnału.
+     */
     public ThresholdsTables addRecord(double[] receivedData, int dataSize, int seqNumber, double timeStamp,
                                       double freqStart, double freqStep, double threshold) {
 
@@ -123,6 +155,10 @@ public class RecordService {
         return thresholdsTables;
     }
 
+    /***
+     * Metoda pobiera dane z repozytorium pomiarów i je zwraca w postaci listy obiektów RecordEntity.
+     * @return zwraca listę wszystkich pomiarów.
+     */
     public List<RecordEntity> getAllRecords() {
         return recordEntityRepository.findAll()
                 .stream()
@@ -135,6 +171,9 @@ public class RecordService {
                 .collect(Collectors.toList());
     }
 
+    /***
+     * metoda kasuje wszystkie pomiary ktore znajdują się w lokalnej bazie danych.
+     */
     public void deleteAllRecords() {
         List<RecordEntity> allRecords = recordEntityRepository.findAll()
                 .stream()
@@ -152,6 +191,13 @@ public class RecordService {
         }
     }
 
+    /***
+     * Metoda pobiera dane z repozytorium pomiarów,
+     * filtruje je po parametrze seqNumber.
+     * Zwraca w postaci listy obiektów RecordEntity.
+     * @param seqNumber numer sekwencji
+     * @return zwraca listę obiektów zawierajacych dany parametr: numer sekwencji.
+     */
     public List<RecordEntity> getRecordsBySeqNumber(int seqNumber) {
         return recordEntityRepository.findBySeqNumber(seqNumber)
                 .stream()
@@ -164,6 +210,10 @@ public class RecordService {
                 .collect(Collectors.toList());
     }
 
+    /***
+     * Metoda kasuje z repozytorium wszystkie pomiary o podanym parametrze: numer sekwencji.
+     * @param seqNumber numer sekwencji
+     */
     public void deleteRecordsBySeqNumber(int seqNumber) {
         List<RecordEntity> allRecordsBySeqNumber = recordEntityRepository.findBySeqNumber(seqNumber)
                 .stream()
@@ -181,6 +231,11 @@ public class RecordService {
         }
     }
 
+    /***
+     * Metoda wyszukuje w repozytorium pomiaru o podanym parametrze: znacznik czasu.
+     * @param timeStamp znacznik czasu
+     * @return zwraca obiekt o podanym parametrze: znacznik czasu.
+     */
     public RecordEntity findRecordByTimeStamp(double timeStamp) {
 
         RecordEntity record = recordEntityRepository.findByTimeStamp(timeStamp).orElseThrow(IllegalArgumentException::new);
@@ -191,6 +246,10 @@ public class RecordService {
                 .build();
     }
 
+    /***
+     * Metoda kasuje z repozytorium pomiar o podanym parametrze: znacznik czasu.
+     * @param timeStamp znacznik czasu
+     */
     public void deleteRecordByTimeStamp(double timeStamp) {
         RecordEntity record = recordEntityRepository.findByTimeStamp(timeStamp).orElseThrow(IllegalArgumentException::new);
         recordEntityRepository.delete(RecordEntity.builder().id(record.getId())
@@ -200,6 +259,12 @@ public class RecordService {
                 .build());
     }
 
+    /***
+     * Metoda wyszukuje w repozytorium zapisanych pomiarów pomiarów o podanym parametrze: indentyfikator pomiaru.
+     * @param recordId indentyfikator pomiaru
+     * @return zwraca listę obiektów o podanym parametrze: indentyfikator pomiaru.
+     * @deprecated ze względu na niską wydajność zastąpiona prez metodę @see getReceivedRecordOneRawByRecordId
+     */
     public List<ReceivedRecordEntity> getReceivedRecordByRecordId(long recordId) {
         return receivedRecordEntityRepository.findByRecordId(recordId)
                 .stream()
@@ -212,6 +277,11 @@ public class RecordService {
                 .collect(Collectors.toList());
     }
 
+    /***
+     * Metoda wyszukuje w repozytorium zapisanych rekordów, zapis w 1 linii (krotce) pomiaru o podanym parametrze: indentyfikator pomiaru.
+     * @param recordId indentyfikator pomiaru
+     * @return zwraca obiekt o podanym parametrze: indentyfikator pomiaru.
+     */
     public ReceivedRecordOneRowEntity getReceivedRecordOneRawByRecordId(long recordId) {
         ReceivedRecordOneRowEntity entity = receivedRecordOneRawEntityRepository.findByRecordId(recordId);
         return ReceivedRecordOneRowEntity
@@ -223,6 +293,12 @@ public class RecordService {
                 .build();
     }
 
+    /***
+     * Metoda wyszukuje w repozytorium zapisanych rekordów które przekraczają próg pomiarów o podanym parametrze: indentyfikator pomiaru.
+     * @param recordId indentyfikator pomiaru
+     * @return zwraca listę obiektów o podanym parametrze: indentyfikator pomiaru.
+     * @deprecated ze względu na niską wydajność zastąpiona prez metodę @see getThresholdCrossingRecordOneRawByRecordId
+     */
     public List<ThresholdCrossingEntity> getThresholdCrossingRecordByRecordId(long recordId) {
         return thresholdCrossingEntityRepository.findByRecordId(recordId)
                 .stream()
@@ -235,6 +311,12 @@ public class RecordService {
                 .collect(Collectors.toList());
     }
 
+    /***
+     * Metoda wyszukuje w repozytorium zapisanych rekordów które przekraczają próg, zapis w 1 linii (krotce)
+     * pomiaru o podanym parametrze: indentyfikator pomiaru
+     * @param recordId indentyfikator pomiaru
+     * @return zwraca obiekt o podanym parametrze: indentyfikator pomiaru.
+     */
     public ThresholdCrossingOneRawEntity getThresholdCrossingRecordOneRawByRecordId(long recordId) {
         ThresholdCrossingOneRawEntity entity = thresholdCrossingEntityOneRawRepository.findByRecordId(recordId);
         return ThresholdCrossingOneRawEntity.builder()
