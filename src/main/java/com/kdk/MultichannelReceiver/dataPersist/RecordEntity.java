@@ -35,12 +35,10 @@ public class RecordEntity {
     @Column(name = "threshold")
     private double threshold;
 
-    //TODO chyba ThresholdCrossingOneRawEntity
     @OneToMany(mappedBy = "recordEntity", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    private Set<ThresholdCrossingEntity> thresholdCrossings;
+    private Set<ThresholdCrossingOneRawEntity> thresholdCrossingOneRawEntities;
 
-    //TODO chyba ReceivedRecordOneRowEntity
     @OneToMany(mappedBy = "recordEntity", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    private Set<ReceivedRecordEntity> receivedRecords;
+    private Set<ReceivedRecordOneRowEntity> receivedRecordOneRowEntities;
 
 }
