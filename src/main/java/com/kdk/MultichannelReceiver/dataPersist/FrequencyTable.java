@@ -18,8 +18,11 @@ public class FrequencyTable {
      *Konstruuje obiekt zawierający tablicę czestotliwości
      */
     @Autowired
-    public FrequencyTable(double[] frequency) {
-        this.frequency = frequency;
+//    public FrequencyTable(double[] frequency) {
+//        this.frequency = frequency;
+//    }
+    public FrequencyTable() {
+//        this.frequency = frequency;
     }
 
     /***

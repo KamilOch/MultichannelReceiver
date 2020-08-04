@@ -25,6 +25,7 @@ public class RecordService {
     private final ThresholdCrossingEntityOneRawRepository thresholdCrossingEntityOneRawRepository;
     private ThresholdsTables thresholdsTables;
 
+
     /***
      * Konstruktor Klasy.
      * @param recordEntityRepository repozytorium zapisanych pomiarów
@@ -39,7 +40,12 @@ public class RecordService {
     @Autowired
     public RecordService(RecordEntityRepository recordEntityRepository,
                          ReceivedRecordEntityRepository receivedRecordEntityRepository,
-                         ThresholdCrossingEntityRepository thresholdCrossingEntityRepository, FrequencyTable frequencyTable, List<ThresholdCrossingEntity> thresholdCrossingEntityList, ReceivedRecordOneRawEntityRepository receivedRecordOneRawEntityRepository, ThresholdCrossingEntityOneRawRepository thresholdCrossingEntityOneRawRepository, ThresholdsTables thresholdsTables) {
+                         ThresholdCrossingEntityRepository thresholdCrossingEntityRepository,
+                         FrequencyTable frequencyTable,
+                         List<ThresholdCrossingEntity> thresholdCrossingEntityList,
+                         ReceivedRecordOneRawEntityRepository receivedRecordOneRawEntityRepository,
+                         ThresholdCrossingEntityOneRawRepository thresholdCrossingEntityOneRawRepository,
+                         ThresholdsTables thresholdsTables) {
         this.recordEntityRepository = recordEntityRepository;
         this.receivedRecordEntityRepository = receivedRecordEntityRepository;
         this.thresholdCrossingEntityRepository = thresholdCrossingEntityRepository;
@@ -103,7 +109,10 @@ public class RecordService {
         String signalThreshold = "";
 
         for (int i = 0; i < dataSize; i++) {
+
             if (receivedData[i] > threshold) {
+                //TODO do sprawdzenia jak ma byc porownywany prog z odebranym sygnalem
+//            if (Math.abs(receivedData[i]) > threshold) {
                 frequencyThreshold += frequencyTable.getFrequency(i) + " ";
                 signalThreshold += receivedData[i] + " ";
             }
