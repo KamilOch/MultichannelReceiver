@@ -80,36 +80,46 @@ public class RecordService {
 
         frequencyTable.generateFrequencyTable(dataSize, freqStart, freqStep);
 
-        RecordEntity newRecord = RecordEntity.builder().timeStamp(timeStamp).seqNumber(seqNumber).threshold(threshold)
-                .build();
-        recordEntityRepository.save(newRecord);
+        long idFromDB = saveRecordEntityInDb(timeStamp, seqNumber, threshold);
 
-        RecordEntity recordEntityFromDb = recordEntityRepository.findByTimeStamp(timeStamp).orElseThrow(IllegalArgumentException::new);
-        long idFromDB = recordEntityFromDb.getId();
+        saveReceivedRecordOneRowEntityInDb(dataSize, frequencyTable, receivedData, idFromDB);
 
+        ThresholdsTables thresholdsTables = saveThresholdCrossingOneRawEntityInDb(dataSize, frequencyTable, receivedData, idFromDB, threshold);
 
-        String allFrequency = "";
-        String allSignal = "";
-
-        for (int i = 0; i < dataSize; i++) {
-            allFrequency += frequencyTable.getFrequency(i) + " ";
-            allSignal += receivedData[i] + " ";
-        }
-
-        allFrequency = allFrequency.substring(0, allFrequency.length() - 1);
-        allSignal = allSignal.substring(0, allSignal.length() - 1);
+//        for (int i = 0; i < dataSize; i++) {
+        //UWAGA v1 zapis danych 1 record tworzy  250 linii z danymi w db
+//            ReceivedRecordEntity newReceivedRecordEntity = ReceivedRecordEntity.builder()
+//                    .frequency(frequencyTable.getFrequency(i)).signalLevel(receivedData[i]).recordId(idFromDB).build();
+//            receivedRecordEntityRepository.save(newReceivedRecordEntity);
 
 
-        // UWAGA v2 zmiana zapisu danych w DB wersja z 1 linijka dla calego recordu
-        ReceivedRecordOneRowEntity receivedRecordOneRowEntity = ReceivedRecordOneRowEntity
-                .builder()
-                .frequencyList(allFrequency)
-                .signalLevelList(allSignal)
-                .recordId(idFromDB)
-                .build();
+//            if (receivedData[i] > threshold) {
+//                //UWAGA v1 zapis przekroczen, przekroczenie tworzy 1 linie z danymi w db
+//                ThresholdCrossingEntity newThresholdCrossingEntity = ThresholdCrossingEntity.builder()
+//                        .frequency(frequencyTable.getFrequency(i)).signalLevel(receivedData[i]).recordId(idFromDB)
+//                        .build();
+//                thresholdCrossingEntityRepository.save(newThresholdCrossingEntity);
+//
+//                thresholdCrossingEntityList.add(newThresholdCrossingEntity);
+//            }
+//        }
 
-        receivedRecordOneRawEntityRepository.save(receivedRecordOneRowEntity);
+        return thresholdsTables;
+    }
 
+    /***
+     * Metoda zapisujaca rekord zawierajacy tylko czestotliwości których poziom sygnału przekraczaja próg.
+     * @param dataSize ilość częstotliwości
+     * @param frequencyTable tabela częstotliwości
+     * @param receivedData tablica zawierajaca poziomy sygnałów
+     * @param idFromDB id zapisanego recordu w bazie danych
+     * @param threshold próg detekcji
+     * @return metoda zwraca obiekt zawierający dwie tablice
+     * (tablicę czestotliwosci i analogicznie tablicę poziomów sygnału)
+     * w ktorych znajdują się tylko cześstotliwośći które przekroczyły próg,
+     * tablicę czestotliwosci i analogicznie tablicę poziomów sygnału.
+     */
+    private ThresholdsTables saveThresholdCrossingOneRawEntityInDb(int dataSize, FrequencyTable frequencyTable, double[] receivedData, long idFromDB, double threshold) {
         String frequencyThreshold = "";
         String signalThreshold = "";
 
@@ -138,24 +148,6 @@ public class RecordService {
             thresholdCrossingEntityOneRawRepository.save(thresholdCrossingOneRawEntity);
         }
 
-//        for (int i = 0; i < dataSize; i++) {
-        //UWAGA v1 zapis danych 1 record tworzy  250 linii z danymi w db
-//            ReceivedRecordEntity newReceivedRecordEntity = ReceivedRecordEntity.builder()
-//                    .frequency(frequencyTable.getFrequency(i)).signalLevel(receivedData[i]).recordId(idFromDB).build();
-//            receivedRecordEntityRepository.save(newReceivedRecordEntity);
-
-
-//            if (receivedData[i] > threshold) {
-//                //UWAGA v1 zapis przekroczen, przekroczenie tworzy 1 linie z danymi w db
-//                ThresholdCrossingEntity newThresholdCrossingEntity = ThresholdCrossingEntity.builder()
-//                        .frequency(frequencyTable.getFrequency(i)).signalLevel(receivedData[i]).recordId(idFromDB)
-//                        .build();
-//                thresholdCrossingEntityRepository.save(newThresholdCrossingEntity);
-//
-//                thresholdCrossingEntityList.add(newThresholdCrossingEntity);
-//            }
-//        }
-
         String[] czestotliwosci = frequencyThreshold.split(" ");
         String[] sygnaly = signalThreshold.split(" ");
 
@@ -169,6 +161,63 @@ public class RecordService {
             }
             return new ThresholdsTables(frequencyThresholdDoubleTable, signalThresholdDoubleTable);
         } else return new ThresholdsTables(new double[0], new double[0]);
+    }
+
+    /***
+     * Metoda zapisujaca rekord zawierajacy wszystkie odebrane czestotliwosci i poziomy sygnalu.
+     * @param dataSize ilość częstotliwości
+     * @param frequencyTable tabela częstotliwości
+     * @param receivedData tablica zawierajaca poziomy sygnałów
+     * @param idFromDB id zapisanego recordu w bazie danych
+     */
+    private void saveReceivedRecordOneRowEntityInDb(int dataSize, FrequencyTable frequencyTable, double[] receivedData, long idFromDB) {
+        String allFrequency = "";
+        String allSignal = "";
+
+        for (int i = 0; i < dataSize; i++) {
+            allFrequency += frequencyTable.getFrequency(i) + " ";
+            allSignal += receivedData[i] + " ";
+        }
+
+        allFrequency = allFrequency.substring(0, allFrequency.length() - 1);
+        allSignal = allSignal.substring(0, allSignal.length() - 1);
+
+
+        // UWAGA v2 zmiana zapisu danych w DB wersja z 1 linijka dla calego recordu
+        ReceivedRecordOneRowEntity receivedRecordOneRowEntity = ReceivedRecordOneRowEntity
+                .builder()
+                .frequencyList(allFrequency)
+                .signalLevelList(allSignal)
+                .recordId(idFromDB)
+                .build();
+
+        receivedRecordOneRawEntityRepository.save(receivedRecordOneRowEntity);
+
+    }
+
+    /***
+     * Metoda zapisujaca do repozytorium:pojedynczy pomiar.
+     * @param timeStamp znacznik czasu
+     * @param seqNumber numer sekwencji
+     * @param threshold próg detekcji
+     * @return zwraca id zapisanego recordu w bazie danych.
+     */
+    private long saveRecordEntityInDb(double timeStamp, int seqNumber, double threshold) {
+
+        RecordEntity newRecord = RecordEntity.builder()
+                .timeStamp(timeStamp)
+                .seqNumber(seqNumber)
+                .threshold(threshold)
+                .build();
+
+        recordEntityRepository.save(newRecord);
+
+        RecordEntity recordEntityFromDb = recordEntityRepository
+                .findByTimeStamp(timeStamp)
+                .orElseThrow(IllegalArgumentException::new);
+
+        return recordEntityFromDb.getId();
+
     }
 
     /***
