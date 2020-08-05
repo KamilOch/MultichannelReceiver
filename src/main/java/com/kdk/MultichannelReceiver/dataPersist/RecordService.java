@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
 public class RecordService {
 
     private final RecordEntityRepository recordEntityRepository;
+    private final FrequencyTable frequencyTable;
+
     private final ReceivedRecordEntityRepository receivedRecordEntityRepository;
     private final ThresholdCrossingEntityRepository thresholdCrossingEntityRepository;
-    private final FrequencyTable frequencyTable;
     private final List<ThresholdCrossingEntity> thresholdCrossingEntityList;
 
     //UWAGA testowanie opcji zapisu do bazy danych (v2) zapis w 1 linii (krotce)
@@ -75,7 +76,7 @@ public class RecordService {
     public ThresholdsTables addRecord(double[] receivedData, int dataSize, int seqNumber, double timeStamp,
                                       double freqStart, double freqStep, double threshold) {
 
-        thresholdCrossingEntityList.clear();
+//        thresholdCrossingEntityList.clear();
 
         frequencyTable.generateFrequencyTable(dataSize, freqStart, freqStep);
 
@@ -95,6 +96,10 @@ public class RecordService {
             allSignal += receivedData[i] + " ";
         }
 
+        allFrequency = allFrequency.substring(0, allFrequency.length() - 1);
+        allSignal = allSignal.substring(0, allSignal.length() - 1);
+
+
         // UWAGA v2 zmiana zapisu danych w DB wersja z 1 linijka dla calego recordu
         ReceivedRecordOneRowEntity receivedRecordOneRowEntity = ReceivedRecordOneRowEntity
                 .builder()
@@ -111,15 +116,18 @@ public class RecordService {
         for (int i = 0; i < dataSize; i++) {
 
             if (receivedData[i] > threshold) {
-                //TODO do sprawdzenia jak ma byc porownywany prog z odebranym sygnalem
-//            if (Math.abs(receivedData[i]) > threshold) {
                 frequencyThreshold += frequencyTable.getFrequency(i) + " ";
                 signalThreshold += receivedData[i] + " ";
             }
         }
 
+        if (frequencyThreshold.length() > 1) {
+            frequencyThreshold = frequencyThreshold.substring(0, frequencyThreshold.length() - 1);
+            signalThreshold = signalThreshold.substring(0, signalThreshold.length() - 1);
+        }
+
         // UWAGA v2 zmiana zapisu danych w DB wersja z 1 linijka dla calego recordu
-        if(frequencyThreshold.length()>1) {
+        if (frequencyThreshold.length() > 1) {
             ThresholdCrossingOneRawEntity thresholdCrossingOneRawEntity = ThresholdCrossingOneRawEntity
                     .builder()
                     .frequencyList(frequencyThreshold)
@@ -151,17 +159,16 @@ public class RecordService {
         String[] czestotliwosci = frequencyThreshold.split(" ");
         String[] sygnaly = signalThreshold.split(" ");
 
-        double[] frequencyThresholdDoubleTable = new double[czestotliwosci.length - 1];
-        double[] signalThresholdDoubleTable = new double[sygnaly.length - 1];
+        double[] frequencyThresholdDoubleTable = new double[czestotliwosci.length];
+        double[] signalThresholdDoubleTable = new double[sygnaly.length];
 
-        for (int i = 0; i < czestotliwosci.length - 1; i++) {
-            frequencyThresholdDoubleTable[i] = Double.parseDouble(czestotliwosci[i]);
-            signalThresholdDoubleTable[i] = Double.parseDouble(sygnaly[i]);
-        }
-
-        thresholdsTables = new ThresholdsTables(frequencyThresholdDoubleTable, signalThresholdDoubleTable);
-
-        return thresholdsTables;
+        if (frequencyThresholdDoubleTable.length > 1) {
+            for (int i = 0; i < czestotliwosci.length; i++) {
+                frequencyThresholdDoubleTable[i] = Double.parseDouble(czestotliwosci[i]);
+                signalThresholdDoubleTable[i] = Double.parseDouble(sygnaly[i]);
+            }
+            return new ThresholdsTables(frequencyThresholdDoubleTable, signalThresholdDoubleTable);
+        } else return new ThresholdsTables(new double[0], new double[0]);
     }
 
     /***

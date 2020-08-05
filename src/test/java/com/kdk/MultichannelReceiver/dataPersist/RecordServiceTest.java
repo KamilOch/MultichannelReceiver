@@ -79,8 +79,8 @@ class RecordServiceTest {
 
         ReceivedRecordOneRowEntity receivedRecordOneRowEntity = ReceivedRecordOneRowEntity
                 .builder()
-                .frequencyList("9000.0 10000.0 ")
-                .signalLevelList("100.0 200.0 ")
+                .frequencyList("9000.0 10000.0")
+                .signalLevelList("100.0 200.0")
                 .recordId(0)
                 .build();
         //when
@@ -110,8 +110,8 @@ class RecordServiceTest {
 
         ThresholdCrossingOneRawEntity thresholdCrossingOneRawEntity = ThresholdCrossingOneRawEntity
                 .builder()
-                .frequencyList("9000.0 10000.0 ")
-                .signalLevelList("100.0 200.0 ")
+                .frequencyList("9000.0 10000.0")
+                .signalLevelList("100.0 200.0")
                 .recordId(0)
                 .build();
         //when
@@ -141,8 +141,8 @@ class RecordServiceTest {
 
         ThresholdCrossingOneRawEntity thresholdCrossingOneRawEntity = ThresholdCrossingOneRawEntity
                 .builder()
-                .frequencyList("9000.0 ")
-                .signalLevelList("100.0 ")
+                .frequencyList("9000.0")
+                .signalLevelList("100.0")
                 .recordId(0)
                 .build();
         //when
@@ -150,6 +150,71 @@ class RecordServiceTest {
         //then
         verify(thresholdCrossingEntityOneRawRepository, times(1)).save(thresholdCrossingOneRawEntity);
     }
+
+    @Test
+    void addThreeExampleRecordAndCheckIfThresholdsTablesReturnTwoValues(){
+        //given
+        double[] receivedData = new double[3];
+        receivedData[0] = 100;
+        receivedData[1] = 200;
+        receivedData[2] = 300;
+
+        int dataSize = 3;
+        int seqNumber = 1;
+        double timeStamp = 58972597;
+        double freqStart = 9000;
+        double freqStep = 1000;
+        double threshold = 150;
+
+        RecordEntity newRecord = RecordEntity.builder().timeStamp(timeStamp).seqNumber(seqNumber).threshold(threshold)
+                .build();
+
+        when(recordEntityRepository.findByTimeStamp(timeStamp)).thenReturn(java.util.Optional.ofNullable(newRecord));
+
+        //when
+        ThresholdsTables thresholdsTables = testRecordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
+        //then
+        assertEquals(2, thresholdsTables.getFrequency().length);
+        assertEquals(2, thresholdsTables.getSignal().length);
+
+        assertEquals(10000, thresholdsTables.getFrequency()[0]);
+        assertEquals(11000, thresholdsTables.getFrequency()[1]);
+        assertEquals(200, thresholdsTables.getSignal()[0]);
+        assertEquals(300, thresholdsTables.getSignal()[1]);
+    }
+
+    @Test
+    void addTwoExampleRecordWhenThresholdHaveMinusValue(){
+        //given
+        double[] receivedData = new double[3];
+        receivedData[0] = -100;
+        receivedData[1] = -200;
+        receivedData[2] = -300;
+
+        int dataSize = 3;
+        int seqNumber = 1;
+        double timeStamp = 58972597;
+        double freqStart = -9000;
+        double freqStep = 1000;
+        double threshold = -250;
+
+        RecordEntity newRecord = RecordEntity.builder().timeStamp(timeStamp).seqNumber(seqNumber).threshold(threshold)
+                .build();
+
+        when(recordEntityRepository.findByTimeStamp(timeStamp)).thenReturn(java.util.Optional.ofNullable(newRecord));
+
+        //when
+        ThresholdsTables thresholdsTables = testRecordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
+        //then
+        assertEquals(2, thresholdsTables.getFrequency().length);
+        assertEquals(2, thresholdsTables.getSignal().length);
+
+        assertEquals(-9000, thresholdsTables.getFrequency()[0]);
+        assertEquals(-8000, thresholdsTables.getFrequency()[1]);
+        assertEquals(-100, thresholdsTables.getSignal()[0]);
+        assertEquals(-200, thresholdsTables.getSignal()[1]);
+    }
+
 
     @Test
     void getAllRecordsWhenRepositoryIsEmpty() {
@@ -387,8 +452,8 @@ class RecordServiceTest {
         //given
         ThresholdCrossingOneRawEntity thresholdCrossingOneRawEntity = ThresholdCrossingOneRawEntity
                 .builder()
-                .frequencyList("9000.0 10000.0 ")
-                .signalLevelList("100.0 200.0 ")
+                .frequencyList("9000.0 10000.0")
+                .signalLevelList("100.0 200.0")
                 .recordId(110)
                 .build();
 
@@ -396,8 +461,8 @@ class RecordServiceTest {
         //when
         ThresholdCrossingOneRawEntity entity = testRecordService.getThresholdCrossingRecordOneRawByRecordId(100);
         //then
-        assertEquals("9000.0 10000.0 ", entity.getFrequencyList());
-        assertEquals("100.0 200.0 ", entity.getSignalLevelList());
+        assertEquals("9000.0 10000.0", entity.getFrequencyList());
+        assertEquals("100.0 200.0", entity.getSignalLevelList());
 
     }
 }
