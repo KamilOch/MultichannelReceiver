@@ -31,8 +31,8 @@ public class Main extends Application {
             loader.setControllerFactory(springContext::getBean);
 
             AnchorPane pane = loader.load();
-            primaryStage.setMinWidth(500.00);
-            primaryStage.setMinHeight(600.00);
+            primaryStage.setMinWidth(1280.00);
+            primaryStage.setMinHeight(800.00);
             Scene scene = new Scene(pane);
 
 			RecordService recordService = (RecordService) springContext.getBean(RecordService.class);
