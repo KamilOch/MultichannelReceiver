@@ -5,7 +5,12 @@ import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
-
+/***
+ * Klasa pojedynczego rekordu który przekroczył próg detekcji.
+ * Obiekty tej klasy reprezentują sposób zapisu do bazy danych
+ * @author Kamil Ochnik
+ * @deprecated z powodu niskiej wydajności Klasa zastąpiona przez Klase @see ThresholdCrossingOneRawEntity
+ */
 @Builder
 @Data
 @AllArgsConstructor

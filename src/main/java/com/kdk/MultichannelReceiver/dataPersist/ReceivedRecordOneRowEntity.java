@@ -4,7 +4,10 @@ import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
-
+/***
+ * Klasa pojedynczego rekordu. Obiekty tej klasy reprezentują sposób zapisu do bazy danych
+ * @author Kamil Ochnik
+ */
 @Builder
 @Data
 @AllArgsConstructor

@@ -2,7 +2,10 @@ package com.kdk.MultichannelReceiver.dataPersist;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+/***
+ * Klasa przechowuje tablicę czestotliwości oraz tablicę poziomu sygnału
+ * @author Kamil Ochnik
+ */
 @Component
 public class ThresholdsTables {
 

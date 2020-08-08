@@ -2,7 +2,14 @@ package com.kdk.MultichannelReceiver.model;
 
 import org.apache.commons.lang3.event.EventListenerSupport;
 
+import com.kdk.MultichannelReceiver.model.utils.PacketConverter;
+
+import javafx.application.Platform;
+
 import java.sql.Timestamp;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Klasa managera umo�liwiajaca pod�aczenie klas jako s�uchaczy zdarzen
@@ -15,18 +22,93 @@ public class ReceiverDataConverter {
 	private static final EventListenerSupport<ReceiverDataConverterListener> receiverDataConverterListeners = new EventListenerSupport<>(ReceiverDataConverterListener.class);
 	int repetitionCounter;
 	int fixedFreq;
+	//BlockingQueue<PacketConverter> blockingQueue;
+	ConcurrentLinkedQueue<PacketConverter> blockingQueue;
+	private static Thread readingThread; 
 	
-	
+
 	/**
      * Konstruktor
      */  
-	public void ReceiverDataConverter() {
-		repetitionCounter = 0;
-		fixedFreq = 0;
+	public ReceiverDataConverter(ConcurrentLinkedQueue<PacketConverter> blockingSpectrumDataQueue) {
+		this.repetitionCounter = 0;
+		this.fixedFreq = 0;
+		this.blockingQueue = blockingSpectrumDataQueue;
+	}
+//	public ReceiverDataConverter(BlockingQueue<PacketConverter> blockingSpectrumDataQueue) {
+//		this.repetitionCounter = 0;
+//		this.fixedFreq = 0;
+//		this.blockingQueue = blockingSpectrumDataQueue;
+//	}
+	public void getDataFromQueue() throws InterruptedException {
+		PacketConverter receivedPacket;
 	
+		//receivedPacket = blockingQueue.take();
 		
+		//receivedPacket = blockingQueue.poll(50, TimeUnit.MILLISECONDS);
+		receivedPacket = blockingQueue.poll();
+//		if(receivedPacket!=null) {
+//			notify(receivedPacket.getSpectrumData(), receivedPacket.getDataSize(), receivedPacket.getSequenceNumber(), 
+//				receivedPacket.getTimeStamp(), receivedPacket.getFreqStart(), receivedPacket.getFreqStep());
+//			
+//		}
+		if(receivedPacket!=null) {
+			Platform.runLater(()->notify(receivedPacket.getSpectrumData(), receivedPacket.getDataSize(), receivedPacket.getSequenceNumber(), 
+				receivedPacket.getTimeStamp(), receivedPacket.getFreqStart(), receivedPacket.getFreqStep()));
+		}
+				
+	}
+	public void startReceiving() {
+		
+		Runnable receivingTask = () -> {
+			boolean End = false;
+			while (!End) {
+				
+				try {
+					getDataFromQueue();
+				} catch (InterruptedException ex) {
+					System.out.println("receivingTask: Interrupted! - finishing task");
+					End = true;
+				}
+			}
+        };
+        readingThread = new Thread(receivingTask);  
+        readingThread.setUncaughtExceptionHandler((t, ex) -> {
+        	System.out.println(ex.getMessage()  + " - exiting task");
+        	readingThread.interrupt();
+		});
+        readingThread.start();
+
 		
 	}
+	public void stopReceiving() {
+		readingThread.interrupt();
+
+		try {
+			readingThread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * Przekazuje dane z odbiornika do słuchaczy
+	 */
+	public synchronized void notifyData(double[] receivedData, int seqNumber, double timeStamp, double freqStart, double freqStep ) { 
+		
+		int dataSize = receivedData.length;	
+		
+		notify(receivedData, dataSize, seqNumber, timeStamp,  freqStart, freqStep);
+		
+	}
+	
 	/**
      * Generuje dane i powiadamia s�uchaczy
      */  
@@ -47,10 +129,12 @@ public class ReceiverDataConverter {
 		for(int i = 0; i<receivedData.length; i++) {
 			double rndnumb = 10 * Math.random();
 			receivedData[i] = (rndnumb>9.95) ? rndnumb + 90 * Math.random(): rndnumb;	
+			receivedData[i] = receivedData[i] -  120;
 			
 			if(i == 45) {
 				if(repetitionCounter<20) {					
 					receivedData[i] = 90 + 5 * Math.random();//stały sygnał na tej samej częstotliwosći					
+					receivedData[i] = receivedData[i] -  120;
 					repetitionCounter++;
 				}
 				else {
@@ -63,7 +147,8 @@ public class ReceiverDataConverter {
 			}
 			if(i == fixedFreq) {
 				if(repetitionCounter<20) {					
-					receivedData[i] = 90 + 5 * Math.random();//stały sygnał na tej samej częstotliwosći					
+					receivedData[i] = 90 + 5 * Math.random();//stały sygnał na tej samej częstotliwosći
+					receivedData[i] = receivedData[i] -  120;
 				}
 			
 			}
@@ -103,7 +188,7 @@ public class ReceiverDataConverter {
     /**
      * Przetwarza dane odebrane z SOCKETA.
      *
-     * @param ctx Kontekst wiadomo�ci JMS
+     * @param ctx Kontekst wiadomo�ci 
      * @param msg Odebrana wiadomo��
      */
 //    private static void onNotify(MsgContext ctx, Event msg) {

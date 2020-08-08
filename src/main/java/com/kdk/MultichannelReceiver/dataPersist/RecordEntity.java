@@ -4,7 +4,12 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
-
+/***
+ * Klasa pojedynczego pomiaru (bez danych pomiarowych,
+ * dane pomiarowe są reprezentowane przez Klase @see ReceivedRecordOneRowEntity).
+ * Obiekty tej klasy reprezentują sposób zapisu do bazy danych
+ * @author Kamil Ochnik
+ */
 @Builder
 @Data
 @AllArgsConstructor
@@ -31,9 +36,9 @@ public class RecordEntity {
     private double threshold;
 
     @OneToMany(mappedBy = "recordEntity", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    private Set<ThresholdCrossingEntity> thresholdCrossings;
+    private Set<ThresholdCrossingOneRawEntity> thresholdCrossingOneRawEntities;
 
     @OneToMany(mappedBy = "recordEntity", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    private Set<ReceivedRecordEntity> receivedRecords;
+    private Set<ReceivedRecordOneRowEntity> receivedRecordOneRowEntities;
 
 }

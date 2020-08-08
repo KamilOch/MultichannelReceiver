@@ -35,8 +35,8 @@
             <Menu mnemonicParsing="false" text="Odbiornik">
               <items>
                 <MenuItem mnemonicParsing="false" text="Ustawienia" />
-                  <MenuItem mnemonicParsing="false" text="Połącz" />
-                  <MenuItem mnemonicParsing="false" text="Rozłącz" />
+                  <MenuItem mnemonicParsing="false" text="Połącz (Odbieraj)" />
+                  <MenuItem mnemonicParsing="false" text="Rozłącz (Zatrzymaj)" />
               </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Widok">
@@ -64,9 +64,9 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </LineChart>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="34.0" prefWidth="670.0">
                      <children>
-                        <Label text="Marker [Mhz]">
+                        <Label text="Marker [MHz]">
                            <HBox.margin>
                               <Insets left="20.0" right="10.0" />
                            </HBox.margin>
@@ -105,7 +105,7 @@
                         <Font size="14.0" />
                      </font>
                      <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
+                        <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
                   <TextField fx:id="fStartField" prefWidth="80.0" text="0" />
@@ -114,12 +114,12 @@
                         <Font size="14.0" />
                      </font>
                      <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
+                        <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
                   <TextField fx:id="fStopField" prefWidth="80.0">
                      <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
+                        <Insets />
                      </VBox.margin></TextField>
                   <Label text="F step [Hz]">
                      <font>
@@ -128,11 +128,32 @@
                      <padding>
                         <Insets bottom="5.0" top="5.0" />
                      </padding>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </Label>
                   <TextField fx:id="fStepField" prefWidth="80.0">
                      <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
+                        <Insets />
                      </VBox.margin></TextField>
+                  <Label text="Nr sekwencyjny">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="seqNumberField" />
+                  <Label text="Time Stamp">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="timeStampField" />
                   <Separator prefWidth="200.0" />
                   <CheckBox mnemonicParsing="false" text="Pauza wyświetlania">
                      <VBox.margin>
@@ -159,22 +180,22 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addBtnHandle" prefHeight="25.0" prefWidth="80.0" text="Odbieraj">
+                  <Button fx:id="receiveBtn" mnemonicParsing="false" onAction="#receiveBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Odbieraj">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="removeBtn" mnemonicParsing="false" onAction="#removeBtnHandle" prefHeight="25.0" prefWidth="80.0" text="Baza danych">
+                  <Button fx:id="databaseBtn" mnemonicParsing="false" onAction="#databaseBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Baza danych">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="chartButton" mnemonicParsing="false" onAction="#chartBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Demo">
+                  <Button fx:id="demoChartBtn" mnemonicParsing="false" onAction="#demoChartBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Demo">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="80.0" text="Zakończ">
+                  <Button fx:id="closeStageBtn" mnemonicParsing="false" onAction="#closeStageBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Zakończ">
                      <font>
                         <Font size="14.0" />
                      </font>

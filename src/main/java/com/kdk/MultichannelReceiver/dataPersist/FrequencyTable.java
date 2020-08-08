@@ -3,16 +3,34 @@ package com.kdk.MultichannelReceiver.dataPersist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/***
+ * Klasa przechowuje tablicę czestotliwości
+ * @author Kamil Ochnik
+ */
 @Component
 public class FrequencyTable {
-
+    /***
+     * Tablica czestotliwości, jednostka double
+     */
     private double[] frequency;
 
+    /**
+     *Konstruuje obiekt zawierający tablicę czestotliwości
+     */
     @Autowired
-    public FrequencyTable(double[] frequency) {
-        this.frequency = frequency;
+//    public FrequencyTable(double[] frequency) {
+//        this.frequency = frequency;
+//    }
+    public FrequencyTable() {
+//        this.frequency = frequency;
     }
 
+    /***
+     * tworzy tablice o wymaganej ilosci elementow i wypelnia ją czestotliwosciami
+     * @param dataSize ilość elementow tablicy
+     * @param freqStart początkowa czestotliwość
+     * @param freqStep krok miedzy czestotliwosciami
+     */
     void generateFrequencyTable(int dataSize, double freqStart, double freqStep) {
         frequency = new double[dataSize];
         frequency[0] = freqStart;
@@ -21,10 +39,19 @@ public class FrequencyTable {
         }
     }
 
+    /***
+     * Zwraca częstotliwość z określonej pozycji tablicy czestotliwości
+     * @param element element tablicy
+     * @return zwraca częstotliwość, jednostka double
+     */
     public double getFrequency(int element) {
         return frequency[element];
     }
 
+    /***
+     * Zwraca kopię tablicy czestotliwości
+     * @return zwraca kopię tablicy czestotliwości, jednostka double
+     */
     public double[] getFrequency() {
         return frequency.clone();
     }

@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/***
+ * Klasa udostępnia punkty końcowe (ENDPOINTY) pobierajace dane z lokalnej bazy danych.
+ * @author Kamil Ochnik
+ */
 @RestController
 public class DataPersistController {
 

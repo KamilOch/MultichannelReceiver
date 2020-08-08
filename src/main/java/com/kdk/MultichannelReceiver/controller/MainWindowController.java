@@ -3,6 +3,8 @@ package com.kdk.MultichannelReceiver.controller;
 import com.kdk.MultichannelReceiver.Main;
 import com.kdk.MultichannelReceiver.dataPersist.RecordService;
 import com.kdk.MultichannelReceiver.model.*;
+import com.kdk.MultichannelReceiver.model.utils.PacketConverter;
+
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -20,14 +22,22 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Component;
 
 
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 
 @Component
@@ -35,19 +45,20 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	private Main main;
 	private Stage primaryStage;
 
-	@FXML private Button addButton;
-	@FXML private Button removeBtn;
 	@FXML private Button loadFileBtn;
 	@FXML private Button saveFileBtn;
-	@FXML private Button reportBtn;	
-	@FXML private Button chartButton;	
+	@FXML private Button receiveBtn;
+	@FXML private Button databaseBtn;
+	@FXML private Button demoChartBtn;	
+	@FXML private Button closeStageBtn;	
 	
 	@FXML private TextField tresholdField;
-	@FXML private TextField firstNameField;
-	@FXML private TextField lastNameField;
-	@FXML private TextField roomField;
-	@FXML private TextField comingHourField;
-	@FXML private TextField leavingHourField;
+	@FXML private TextField fMarkerField;
+	@FXML private TextField fStartField;
+	@FXML private TextField fStopField;
+	@FXML private TextField fStepField;
+	@FXML private TextField seqNumberField;
+	@FXML private TextField timeStampField;
 	@FXML private ImageView imageView;
 	@FXML private BorderPane rightPane;
 	@FXML private LineChart lineChart;
@@ -57,11 +68,18 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@FXML private TableColumn <ProcessedDataForTableView, Double> signalsNumberColumn;
 	@FXML private TableColumn <ProcessedDataForTableView, Double> freqColumn;
 
-	
-	
-	ReceiverDataConverter dataConverter = new ReceiverDataConverter();
+	ConcurrentLinkedQueue<PacketConverter> blockingSpectrumDataQueue = new ConcurrentLinkedQueue<>();
+	//BlockingQueue<PacketConverter> blockingSpectrumDataQueue = new LinkedBlockingQueue<>();//kolejka FIFO blokująca - zapewnia dostęp do odebranych danych dla wielu wątków
+	ReceiverDataConverter dataConverter = new ReceiverDataConverter(blockingSpectrumDataQueue);
 	SpectrumWaterfall spectrumWaterfall = new SpectrumWaterfall(256) ;
 	SpectrumDataProcessor spectrumProcessor = new SpectrumDataProcessor();
+	
+	PacketConverter spectrumDataPacket = new PacketConverter();//wspólna struktura z odebranymi danymi
+	
+	//wątek odbiorczy
+	ReceiverUDPClient udpClientThread = null;
+	boolean bReception = false;
+
 	
 	
 	Thread tSimulator;
@@ -69,6 +87,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	
 	private ObservableList<ProcessedDataForTableView> processedDataList = FXCollections.observableArrayList();
 
+	
 	
 	public void setMain(Main main, Stage primaryStage) {
 		this.main = main;
@@ -98,9 +117,11 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		lineChart.setCreateSymbols(false);
 		lineChart.getYAxis().setAnimated(false);
 		lineChart.getXAxis().setAnimated(false);
-		lineChart.getYAxis().setMaxHeight(120);
-		lineChart.getYAxis().setAutoRanging(false);
-		
+		//lineChart.getYAxis().setMaxHeight(0);
+		//lineChart.getYAxis().setMinHeight(-100);
+		lineChart.getYAxis().setAutoRanging(true);
+	
+		imageView.setFitWidth(lineChart.getWidth());
 		
 	
 		tresholdField.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
@@ -125,6 +146,9 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 			}
 		});
 		
+		
+		
+		
 	}
 
 	public void setRecordService(RecordService recordService) {
@@ -133,7 +157,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 
 
 	@FXML
-	public void closeStage(){
+	public void closeStageBtnHandler(){
 		
 		if (bSimulation) {
 			tSimulator.interrupt();
@@ -169,13 +193,52 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 
 	
 	@FXML 
-	public void addBtnHandle(){
-		System.out.println("addPersonBtn pressed");
+	public void receiveBtnHandler(){
+		
+		if(bReception) {//zatrzymanie odbioru
+			udpClientThread.interrupt();
+			try {
+				udpClientThread.join();
+				System.out.println("UDPClient stopped");
+				receiveBtn.setText("Odbieraj");
+				
+				//dataConverter.stopReceiving();
+				
+				System.out.println("DataConverter stopped, queue size: " + blockingSpectrumDataQueue.size());
+				blockingSpectrumDataQueue.clear();
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			bReception = false;
+			
+		}
+		else {//uruchomienie odbioru pakietów UDP
+			try {
+				//udpClientThread = new ReceiverUDPClient("192.168.11.2", 4445, spectrumDataPacket, dataConverter, blockingSpectrumDataQueue);
+				udpClientThread = new ReceiverUDPClient("localhost", 4445, spectrumDataPacket, dataConverter, blockingSpectrumDataQueue);
+				udpClientThread.start();
+				System.out.println("UDPClient started");
+				receiveBtn.setText("Zatrzymaj");
+				bReception = true;
+				
+				//dataConverter.startReceiving();
+				
+			} catch (SocketException | UnknownHostException e1) {
+				// TODO Auto-generated catch block
+				System.out.println("UDP_Test1: " + e1.getMessage());
+			}
+		}
+		
 		
 
 	}
+	//wczytuje dane nieprzetworzone z bazy danych i uruchamia ich odtwarzanie 
+	//ponowne naciśniecie zatrzymuj odtwarzanie
+	
 	@FXML 
-	public void removeBtnHandle(){
+	public void databaseBtnHandler(){
 		;
 	}
 	@FXML
@@ -216,13 +279,10 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	public void saveFileHandler() {
 		;
 	}
-	@FXML
-	public void reportHandler() {		
-		;		
-	}	
 	
+	//wyświetla dane lokalnie generowane losowo 
 	@FXML
-	public void chartBtnHandler() {	
+	public void demoChartBtnHandler() {	
 		
 		if(bSimulation) {//wyłączenie symulacji
 			tSimulator.interrupt(); 
@@ -266,14 +326,42 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	public void onDataReceived(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart,
 			double freqStep) {		
 		//przyk�adowe wy�wietleie danych
+		System.out.println("lineChart - onDataReceived");
+		seqNumberField.setText(Integer.toString(seqNumber));
+		timeStampField.setText(Double.toString(timeStamp));
+		fStartField.setText(Double.toString(freqStart));
+		fStepField.setText(Double.toString(freqStep));
 		
-
+//		Task task = new Task<Void> () {
+//		    @Override public Void call() {
+//		    	
+//				lineChart.getData().clear();
+//				XYChart.Series dataSeries1 = new XYChart.Series();
+//				dataSeries1.setName("WYKRES WIDMA");
+//				for(int i = 0; i<receivedData.length; i++) {
+//					dataSeries1.getData().add(new XYChart.Data( Double.toString(freqStart+ i*freqStep), receivedData[i]));
+//				}
+//				
+//				lineChart.getData().add(dataSeries1);
+//		    	
+//		    	
+//		        
+//		        return null;
+//		    }
+//		};
+//		new Thread(task).start();
+		
+		
+		
+		
+		//tu można odpalić wątek do odświeżania wykresu widma
+		lineChart.getData().clear();
 		XYChart.Series dataSeries1 = new XYChart.Series();
 		dataSeries1.setName("WYKRES WIDMA");
 		for(int i = 0; i<receivedData.length; i++) {
 			dataSeries1.getData().add(new XYChart.Data( Double.toString(freqStart+ i*freqStep), receivedData[i]));
 		}
-		lineChart.getData().clear();
+		
 		lineChart.getData().add(dataSeries1);
 		
 	}
@@ -283,9 +371,9 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 			double freqStep) {
 		
 		imageView.setImage(waterfallImage);
-		imageView.setFitWidth(lineChart.getWidth());
+		//imageView.setFitWidth(lineChart.getWidth());
 		//imageView = new ImageView(waterfallImage);	
-		System.out.println("new waterfallImage");
+		//System.out.println("new waterfallImage");
 		
 	}
 
