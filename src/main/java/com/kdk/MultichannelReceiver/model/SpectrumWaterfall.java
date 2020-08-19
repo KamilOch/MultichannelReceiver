@@ -8,6 +8,11 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
+/**
+ * Klasa SpectrumWaterfall do tworzenia obrau 2D widma w funkcji czasu
+ * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
+ *
+ */
 public class SpectrumWaterfall implements ReceiverDataConverterListener {
 
 	WritableImage waterfallImage;

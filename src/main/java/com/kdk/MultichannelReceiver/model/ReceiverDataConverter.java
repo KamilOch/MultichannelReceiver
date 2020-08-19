@@ -12,11 +12,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Klasa managera umo�liwiajaca pod�aczenie klas jako s�uchaczy zdarzen
+ * Klasa managera umozliwiajaca podlaczenie klas jako sluchaczy zdarzen o odbiorze danych widma z odbiornika
  * 
  * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
  */
-
 public class ReceiverDataConverter {
 	
 	private static final EventListenerSupport<ReceiverDataConverterListener> receiverDataConverterListeners = new EventListenerSupport<>(ReceiverDataConverterListener.class);
@@ -28,7 +27,8 @@ public class ReceiverDataConverter {
 	
 
 	/**
-     * Konstruktor
+     * Konstruktor klasy ReceiverDataConverter
+     * @param ConcurrentLinkedQueue<PacketConverter> blockingSpectrumDataQueue - kolejka FIFO z pakitami typu PacketConverter z odbiornika
      */  
 	public ReceiverDataConverter(ConcurrentLinkedQueue<PacketConverter> blockingSpectrumDataQueue) {
 		this.repetitionCounter = 0;
@@ -40,6 +40,7 @@ public class ReceiverDataConverter {
 //		this.fixedFreq = 0;
 //		this.blockingQueue = blockingSpectrumDataQueue;
 //	}
+	
 	public void getDataFromQueue() throws InterruptedException {
 		PacketConverter receivedPacket;
 	
@@ -99,7 +100,7 @@ public class ReceiverDataConverter {
 	
 	
 	/**
-	 * Przekazuje dane z odbiornika do słuchaczy
+	 * Przekazuje dane z odbiornika do zarejestrowanych sluchaczy klasy
 	 */
 	public synchronized void notifyData(double[] receivedData, int seqNumber, double timeStamp, double freqStart, double freqStep ) { 
 		
@@ -110,7 +111,7 @@ public class ReceiverDataConverter {
 	}
 	
 	/**
-     * Generuje dane i powiadamia s�uchaczy
+     * Generuje dane losowe w trybie demo i powiadamia sluchaczy
      */  
 	public void convertData() {
 		
@@ -164,9 +165,9 @@ public class ReceiverDataConverter {
 	
 	
 	/**
-     * Dodaje s�uchcza zdarze� odebrania danych.
+     * Dodaje sluchcza zdarzen odebrania danych.
      *
-     * @param listener - dodawany s�uchacz
+     * @param ReceiverDataConverterListener listener - dodawany s�uchacz
      */
 	public void addListener(ReceiverDataConverterListener listener) {
         if (listener != null) {
@@ -175,9 +176,9 @@ public class ReceiverDataConverter {
     }
 
     /**
-     * Usuwa s�uchacza zdarze� odebrania danych.
+     * Usuwa sluchacza zdarzen odebrania danych.
      *
-     * @param listener - usuwany s�ychacz
+     * @param ReceiverDataConverterListener listener - usuwany sluchacz
      */
     public void removeListener(ReceiverDataConverterListener listener) {
         if (listener != null) {
@@ -186,46 +187,18 @@ public class ReceiverDataConverter {
     }
     
     /**
-     * Przetwarza dane odebrane z SOCKETA.
+     * Notyfikuje wszystkich zarejestowanych sluchaczy o nowych odebranych danych.
      *
-     * @param ctx Kontekst wiadomo�ci 
-     * @param msg Odebrana wiadomo��
+     * @param ReceiverDataConverterListener listener - usuwany sluchacz
      */
-//    private static void onNotify(MsgContext ctx, Event msg) {
-//
-//        EventSocketStatus SocketMsg = (EventSocketStatus)msg;
-//        if (null != SocketMsg ) {
-//
-//        	EventSocketStatus e = (EventSocketStatus) msg;
-//            H117gServerCommand sc = H117gServerCommand.valueOf(e.getH117gServerCommand());
-//            if (null != sc) {
-//                switch (sc) {
-//                    case DATA:                        
-//                        if (!connectionWithServer.get()) {
-//                        	receiverDataConverterListeners.fire().onDataReceived(final double[] receivedData, final int dataSize, int seqNumber, double timeStamp, double freqStart, double freqStep);
-//                        }
-//                        break;
-//                    case ERROR:
-//                    	receiverDataConverterListeners.fire().onError(receiverError.valueOf(e.getErrorCode()).getLabel());
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//        }  else {
-//            LOGGER.warn("Unexpected notification:\n{}", msg);
-//        }
-//
-//    }
     private static void notify(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart, double freqStep) {
         
             if (receivedData != null) {
             	receiverDataConverterListeners.fire().onDataReceived( receivedData, 
-            			dataSize, seqNumber, timeStamp, freqStart, freqStep);         
-                
+            			dataSize, seqNumber, timeStamp, freqStart, freqStep);    
             }
             else {
-            	receiverDataConverterListeners.fire().onError("data reception Error");
+            	receiverDataConverterListeners.fire().onError("data reception Error - receivedData == null");
             }
 
     }

@@ -4,7 +4,8 @@
 package com.kdk.MultichannelReceiver.model;
 
 /**
- * @author Wilgucki
+ * Interfejs do przekazywania danych widma z odbiornika pomiêdzy poszczególnymi klasami
+ * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
  *
  */
 public interface ReceiverDataInterface {
