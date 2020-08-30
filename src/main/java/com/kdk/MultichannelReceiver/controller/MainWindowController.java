@@ -1,43 +1,46 @@
 package com.kdk.MultichannelReceiver.controller;
 
-import com.kdk.MultichannelReceiver.Main;
-import com.kdk.MultichannelReceiver.dataPersist.RecordService;
-import com.kdk.MultichannelReceiver.model.*;
-import com.kdk.MultichannelReceiver.model.utils.PacketConverter;
-
-import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-
-import org.springframework.scheduling.config.Task;
-import org.springframework.stereotype.Component;
-
-
-
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.file.Paths;
 import java.util.Scanner;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
+
+import org.springframework.stereotype.Component;
+
+import com.kdk.MultichannelReceiver.Main;
+import com.kdk.MultichannelReceiver.controllerCharts.PRK_4ZoomableLineChart_2c_clean;
+import com.kdk.MultichannelReceiver.dataPersist.RecordService;
+import com.kdk.MultichannelReceiver.model.ProcessedDataForTableView;
+import com.kdk.MultichannelReceiver.model.ReceiverDataConverter;
+import com.kdk.MultichannelReceiver.model.ReceiverDataConverterListener;
+import com.kdk.MultichannelReceiver.model.ReceiverUDPClient;
+import com.kdk.MultichannelReceiver.model.SpectrumDataProcessor;
+import com.kdk.MultichannelReceiver.model.SpectrumDataProcessorListener;
+import com.kdk.MultichannelReceiver.model.SpectrumWaterfall;
+import com.kdk.MultichannelReceiver.model.SpectrumWaterfallListener;
+import com.kdk.MultichannelReceiver.model.utils.PacketConverter;
+
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 @Component
@@ -52,7 +55,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@FXML private Button demoChartBtn;	
 	@FXML private Button closeStageBtn;	
 	
-	@FXML private TextField tresholdField;
+	@FXML public TextField tresholdField;
 	@FXML private TextField fMarkerField;
 	@FXML private TextField fStartField;
 	@FXML private TextField fStopField;
@@ -62,6 +65,10 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@FXML private ImageView imageView;
 	@FXML private BorderPane rightPane;
 	@FXML private LineChart lineChart;
+	
+	//&&:
+	@FXML private VBox vboxCharts;
+
 	
 	@FXML private TableView <ProcessedDataForTableView> tableView;
 	@FXML private TableColumn <ProcessedDataForTableView, Double> timeStampColumn;
@@ -75,6 +82,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	SpectrumDataProcessor spectrumProcessor = new SpectrumDataProcessor();
 	
 	PacketConverter spectrumDataPacket = new PacketConverter();//wspólna struktura z odebranymi danymi
+	
 	
 	//wątek odbiorczy
 	ReceiverUDPClient udpClientThread = null;
@@ -93,6 +101,11 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		this.main = main;
 		this.primaryStage=primaryStage;
 
+		//Damian dodal linie:
+		PRK_4ZoomableLineChart_2c_clean charts = new PRK_4ZoomableLineChart_2c_clean(dataConverter, vboxCharts,
+				spectrumProcessor);
+		
+		//vboxCharts = charts.chartsVbox;
 
 		//dodajemy s�uchaczy odbieraj�cych dane 
 		dataConverter.addListener(this);		
@@ -101,7 +114,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		spectrumWaterfall.addListener(this);
 		spectrumProcessor.addListener(this);
 	
-		spectrumProcessor.setThreshold(Double.parseDouble(tresholdField.getText()));
+//		spectrumProcessor.setThreshold(Double.parseDouble(tresholdField.getText())); //commented by Damian
 		processedDataList.add(new ProcessedDataForTableView());
 		tableView.setItems(processedDataList);
 		
@@ -123,7 +136,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	
 		imageView.setFitWidth(lineChart.getWidth());
 		
-	
+/*	//commented by Damian:
 		tresholdField.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
 	        if (newPropertyValue) {
 
@@ -145,7 +158,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 				spectrumProcessor.setThreshold(Double.parseDouble(tresholdField.getText()));
 			}
 		});
-		
+*/		
 		
 		
 		
