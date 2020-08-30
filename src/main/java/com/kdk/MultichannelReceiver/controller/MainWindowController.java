@@ -43,6 +43,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
+/**
+ * Klasa kontrolera aplikacji odbierajacej dane z odbiornika 
+ * @author Kamil Wilgucki k.wilgucki@wil.waw.pl, 
+ * @author Kamil Ochnik,
+ * @author Damian Garstka
+ *
+ */
 @Component
 public class MainWindowController implements ReceiverDataConverterListener, SpectrumWaterfallListener, SpectrumDataProcessorListener{
 	private Main main;
@@ -204,9 +211,60 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		;
 	}
 
-	
+	@FXML
+	public void connectMenuItemHandler(){
+		
+		if(bReception) {//nic nie robi			
+			;
+		}
+		else {//uruchomienie odbioru pakietów UDP
+			try {
+				//udpClientThread = new ReceiverUDPClient("192.168.11.2", 4445, spectrumDataPacket, dataConverter, blockingSpectrumDataQueue);
+				udpClientThread = new ReceiverUDPClient("localhost", 4445, spectrumDataPacket, dataConverter, blockingSpectrumDataQueue);
+				udpClientThread.start();
+				System.out.println("UDPClient started");
+				receiveBtn.setText("Zatrzymaj");
+				bReception = true;
+				tStatusField.setText("Podłączenie do odbiornika");
+				
+				//dataConverter.startReceiving();
+				
+			} catch (SocketException | UnknownHostException e1) {
+				// TODO Auto-generated catch block
+				System.out.println("UDP_Test1: " + e1.getMessage());
+			}
+		}
+		
+		
+
+	}
 
 
+	@FXML 
+	public void disconnectMenuItemHandler(){
+		
+		if(bReception) {//zatrzymanie odbioru
+			
+			udpClientThread.interrupt();
+			try {
+				udpClientThread.join();
+				System.out.println("UDPClient stopped");
+				receiveBtn.setText("Odbieraj");
+				
+				//dataConverter.stopReceiving();
+				
+				System.out.println("DataConverter stopped, queue size: " + blockingSpectrumDataQueue.size());
+				blockingSpectrumDataQueue.clear();
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			bReception = false;
+			tStatusField.setText("Odłączenie od odbiornika");
+			
+		}
+	}
 	
 	@FXML 
 	public void receiveBtnHandler(){

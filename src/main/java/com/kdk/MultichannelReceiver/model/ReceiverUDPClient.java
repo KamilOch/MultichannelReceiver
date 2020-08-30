@@ -222,6 +222,90 @@ public class ReceiverUDPClient extends Thread{
         return result;
 
     }
+    public boolean receiveTest(boolean displayReceivedData) throws IOException, InterruptedException {
+    	
+    	boolean result = false;
+    	buf = new byte[32768];//maksymalny rozmiar pakietu UDP
+        DatagramPacket packet = new DatagramPacket(buf, buf.length);
+        socket.receive(packet);
+        
+    
+        
+        int data_size = packet.getLength();
+        if (data_size >= 2092) {
+            int bufferPos = 0;
+            byte[] dataReceived = packet.getData();
+            int rMagicWord = UsefulConvertFunctions.GetIntFromBEBuffer(dataReceived, bufferPos, 4);
+            bufferPos += 4;
+            int rsequenceNumber = UsefulConvertFunctions.GetIntFromBEBuffer(dataReceived, bufferPos, 4);
+            bufferPos += 4;
+            double rtimeStamp = UsefulConvertFunctions.GetDoubleFromBuffer(dataReceived, bufferPos, 8, ByteOrder.BIG_ENDIAN);
+            bufferPos += 8;
+            bufferPos += 8;//dummy
+            int rdataSize = UsefulConvertFunctions.GetIntFromBEBuffer(dataReceived, bufferPos, 4);
+            bufferPos += 4;
+            double freqStart = UsefulConvertFunctions.GetDoubleFromBuffer(dataReceived, bufferPos, 8, ByteOrder.BIG_ENDIAN);
+            bufferPos += 8;;
+            double freqStep = UsefulConvertFunctions.GetDoubleFromBuffer(dataReceived, bufferPos, 8, ByteOrder.BIG_ENDIAN);
+            bufferPos += 8;
+            double[] spectrumData = new double[rdataSize];
+            
+            for(int i = 0; i<rdataSize; i++) {
+            	spectrumData[i] = UsefulConvertFunctions.GetDoubleFromBuffer(dataReceived, bufferPos, 8, ByteOrder.BIG_ENDIAN);
+                bufferPos += 8;
+                //System.out.println(spectrumData[i]);
+            }
+            
+            //sprawdzanie poprawności danych
+            if (rMagicWord == 0xAAAA5667)
+				 result = true;
+			else
+				result = false;
+            
+            if (rsequenceNumber >= 0)
+				 result = true;
+			else
+				result = false;
+              
+            if (rdataSize >= 256)
+				 result = true;
+			else
+				result = false;
+            
+            if (rdataSize<= 8192)
+				 result = true;
+			else
+				result = false;
+            
+            if (freqStart >= 250000)
+				 result = true;
+			else
+				result = false;
+            
+            if (freqStep >= 1)
+				 result = true;
+			else
+				result = false;
+            	
+            
+            //wszystkie dane pobrane - przekazanie ich do czekających wątków
+            if(result && (receiverDataConverter != null))//jeśli dane poprawne
+            	//Platform.runLater(()-> receiverDataConverter.notifyData(spectrumData, rsequenceNumber, rtimeStamp, freqStart, freqStep ));//działa ale sie lekko przycina
+             receiverDataConverter.notifyData(spectrumData, rsequenceNumber, rtimeStamp, freqStart, freqStep );
+            //blockingSpectrumDataQueue.add(new PacketConverter(rMagicWord, rsequenceNumber, rtimeStamp, rdataSize, freqStart, freqStep, spectrumData));//testowane ale nie było poprawy działania            
+            //sharedSpectrumDataPacket.setPacket(rMagicWord, rsequenceNumber, rtimeStamp, rdataSize, freqStart, freqStep, spectrumData);
+
+            //wy�wietlenie testowe
+            if(displayReceivedData) {
+            	System.out.println("MW: " + rMagicWord + " rsequenceNumber: " + rsequenceNumber + " rtimeStamp: " + rtimeStamp);
+            	System.out.println(" rdataSize: " + rdataSize + " freqStart: " + freqStart + " freqStep: " + freqStep);
+            }	
+            
+        }
+        //System.out.println(" Received packet length: " + packet.getLength() + " Reomte port: " + packet.getPort());
+        return result;
+
+    }
     /**
      * Metoda zamykaj�ca gniazdo 
      */
@@ -274,6 +358,52 @@ public class ReceiverUDPClient extends Thread{
 		}
 		//koniec pracy 
     	//sendMsg("end ");//przesy�amy polecenie wy�aczenia serwera odbiornika
+		close();//zamykamy gniazdo
+	}
+    
+    public void runTest() {
+		running = true;
+		int packetCounter = 0;
+		
+		while (running) {
+
+			if (packetCounter < 100) {
+
+				try {
+					boolean receiveResult = false;
+					receiveResult = receiveTest(false);
+					System.out.println("Client received: " + receiveResult);
+					if(receiveResult)
+						packetCounter++;
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.out.println("Client1: " + e.getMessage());
+				}
+				catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					System.out.println("Client1: " + e.getMessage());
+					//running = false;
+				}
+
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Client1: " + e1.getMessage());
+					running = false;
+				}
+				
+				
+			}
+			else {
+				running = false;//wy��czamy w�tek klienta odbiorczego po 10000 pakietach (tymczasowo)
+			}
+				
+
+		}
+		//koniec pracy 
+		sendMsg("end ");//przesy�amy polecenie wy�aczenia serwera odbiornika
 		close();//zamykamy gniazdo
 	}
 }

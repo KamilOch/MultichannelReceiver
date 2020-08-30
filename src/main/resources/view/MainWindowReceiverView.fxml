@@ -28,18 +28,18 @@
         <menus>
           <Menu mnemonicParsing="false" text="Plik">
             <items>
-              <MenuItem mnemonicParsing="false" text="Wczytaj plik" />
-                  <MenuItem mnemonicParsing="false" text="Zakończ" />
+              <MenuItem mnemonicParsing="false" text="Wczytaj plik" visible="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#closeStageBtnHandler" text="Zakończ" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Odbiornik">
               <items>
-                <MenuItem mnemonicParsing="false" text="Ustawienia" />
-                  <MenuItem mnemonicParsing="false" text="Połącz (Odbieraj)" />
-                  <MenuItem mnemonicParsing="false" text="Rozłącz (Zatrzymaj)" />
+                <MenuItem mnemonicParsing="false" text="Ustawienia" visible="false" />
+                  <MenuItem fx:id="connectMenuItem" mnemonicParsing="false" onAction="#connectMenuItemHandler" text="Połącz (Odbieraj)" />
+                  <MenuItem fx:id="disconnectMenuItem" mnemonicParsing="false" onAction="#disconnectMenuItemHandler" text="Rozłącz (Zatrzymaj)" />
               </items>
             </Menu>
-          <Menu mnemonicParsing="false" text="Widok">
+          <Menu mnemonicParsing="false" text="Widok" visible="false">
             <items>
               <MenuItem mnemonicParsing="false" text="Opcje widoku" />
             </items>
@@ -162,12 +162,12 @@
          <left>
             <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="loadFileBtn" mnemonicParsing="false" onAction="#loadFileHandler" prefHeight="25.0" prefWidth="80.0" text="Wczytaj">
+                  <Button fx:id="loadFileBtn" mnemonicParsing="false" onAction="#loadFileHandler" prefHeight="25.0" prefWidth="80.0" text="Wczytaj" visible="false">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="saveFileBtn" mnemonicParsing="false" onAction="#saveFileHandler" prefHeight="25.0" prefWidth="80.0" text="Zapisuj">
+                  <Button fx:id="saveFileBtn" mnemonicParsing="false" onAction="#saveFileHandler" prefHeight="25.0" prefWidth="80.0" text="Zapisuj" visible="false">
                      <font>
                         <Font size="14.0" />
                      </font>
