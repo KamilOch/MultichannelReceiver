@@ -21,7 +21,7 @@ import javafx.application.Platform;
 
 
 /**
- * Klasa klienta UDP odbieraj¹cego dane z odbiornika i przekazuj¹ce odebrany i przepaklowany pakiet do klas s³uchaczy poprzez 
+ * Klasa klienta UDP odbierajacego dane z odbiornika i przekazujace odebrany i przepaklowany pakiet do klas sluchaczy poprzez wywolanie zdarzenia onDataReceived z klasy receiverDataConverter (notifyData)
  * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
  *
  */
@@ -31,29 +31,29 @@ public class ReceiverUDPClient extends Thread{
     private int receivePort;
     private boolean running;
     private byte[] buf;
-    private PacketConverter sharedSpectrumDataPacket;
+    //private PacketConverter sharedSpectrumDataPacket;
     private ReceiverDataConverter receiverDataConverter;
     //private BlockingQueue<PacketConverter> blockingSpectrumDataQueue;
-    private ConcurrentLinkedQueue<PacketConverter> blockingSpectrumDataQueue;
+    //private ConcurrentLinkedQueue<PacketConverter> blockingSpectrumDataQueue;
     
     
     /**
      * Konstruktor Klasy ReceiverUDPClient.
-     * @param String ipAddress - adres IP serwera UDP streamuj¹cego dane pomiarowe
-     * @param int receivePort - numer portu na któey dane s¹ przey³ane
+     * @param String ipAddress - adres IP serwera UDP streamujï¿½cego dane pomiarowe
+     * @param int receivePort - numer portu na ktï¿½ey dane sï¿½ przeyï¿½ane (domyslnie 4445)
      * @param PacketConverter spectrumDataPacket - klasa pakietu z odebranymi danymi z odbiornika
-     * @param ReceiverDataConverter dataConverter - 
-     * @param ConcurrentLinkedQueue<PacketConverter> blockingQueue - (nieu¿ywana ze wzglêdu na s³ab¹ wydajnoœæ) kolejka FIFO z odebranymi pakiertami danych spectrumDataPacket z odbiornika doo dalszego przetwarzania
+     * @param ReceiverDataConverter dataConverter - klasa managera umozliwiajaca podlaczenie klas jako sluchaczy zdarzen o odbiorze danych widma z odbiornika
+     * @param ConcurrentLinkedQueue<PacketConverter> blockingQueue - (nieuï¿½ywana ze wzglï¿½du na sï¿½abï¿½ wydajnoï¿½ï¿½) kolejka FIFO z odebranymi pakiertami danych spectrumDataPacket z odbiornika doo dalszego przetwarzania
      * @param receivedRecordOneRawEntityRepository repozytorium zapisanych rekordÃ³w, zapis w 1 linii (krotce)
-	 * @throws SocketException, UnknownHostException - rzucane wyj¹tki  
+	 * @throws SocketException, UnknownHostException - rzucane wyjï¿½tki  
      */
     public ReceiverUDPClient(String ipAddress, int receivePort, PacketConverter spectrumDataPacket, ReceiverDataConverter dataConverter, ConcurrentLinkedQueue<PacketConverter> blockingQueue) throws SocketException, UnknownHostException {
 		super();
 		this.address = InetAddress.getByName(ipAddress);;
 		this.receivePort = receivePort;
-		this.sharedSpectrumDataPacket = spectrumDataPacket;//wspÃ³lna struktura z odebranymi danymi
+		//this.sharedSpectrumDataPacket = spectrumDataPacket;//wspÃ³lna struktura z odebranymi danymi
 		this.receiverDataConverter = dataConverter;
-		this.blockingSpectrumDataQueue = blockingQueue;
+		//this.blockingSpectrumDataQueue = blockingQueue;
 		socket = new DatagramSocket(receivePort);
 		socket.setReceiveBufferSize(32768);//maksymalny rozmiar bufora odbiorczego
         socket.setSoTimeout(500);//maksymalny czas oczekiwania na pakiet
@@ -74,8 +74,8 @@ public class ReceiverUDPClient extends Thread{
 //	}
     /**
      * Uproszcony konstruktor Klasy ReceiverUDPClient.
-     * @param String ipAddress - adres IP serwera UDP streamuj¹cego dane pomiarowe
-	 * @throws SocketException, UnknownHostException - rzucane wyj¹tki  
+     * @param String ipAddress - adres IP serwera UDP streamujï¿½cego dane pomiarowe na port 4445
+	 * @throws SocketException, UnknownHostException - rzucane wyjï¿½tki  
      */ 
 	public ReceiverUDPClient(String ipAddress) throws SocketException, UnknownHostException {
         socket = new DatagramSocket(4445);
@@ -87,7 +87,7 @@ public class ReceiverUDPClient extends Thread{
     }
 	
 	/**
-     * Metoda zwracaj¹ca adres IP swerwera odbiornika.
+     * Metoda zwracajï¿½ca adres IP swerwera odbiornika.
      * @return InetAddress address - zwraca odres IP serwera.  
      */ 
     public InetAddress getAddress() {
@@ -95,16 +95,16 @@ public class ReceiverUDPClient extends Thread{
 	}
 
     /**
-     * Metoda zwracaj¹ca numer portu do nas³uchu danych z serwera odbiornika.
-     * @return int receivePort - zwraca numer portu na którym nas³uchuje danych z serwera odbiornika.  
+     * Metoda zwracajï¿½ca numer portu do nasï¿½uchu danych z serwera odbiornika.
+     * @return int receivePort - zwraca numer portu na ktï¿½rym nasï¿½uchuje danych z serwera odbiornika.  
      */ 
 	public int getReceivePort() {
 		return receivePort;
 	}
 
 	/**
-     * Metoda wysy³aj¹ca pakiet UDP.
-     * @param String msg - wysy³any pakiet typu String. 
+     * Metoda wysyï¿½ajï¿½ca pakiet UDP (komendy "end" do serwera odbiornika koÅ„czacej jego prace).
+     * @param String msg - wysyï¿½any pakiet typu String. 
      * @return String received - zwraca odebrany pakiet odpowiedzi.  
      */ 
     public String sendMsg(String msg) {
@@ -134,13 +134,13 @@ public class ReceiverUDPClient extends Thread{
     }
     
     /**
-     * Metoda odbieraj¹ca pakiety UDP z gniazda, wyci¹gaj¹ca dane z pakietu i notyfikuj¹ca wszystkich s³uchaczy klasy receiverDataConverter o odbierze danych.
-     * @return boolean result - zwraca status odbioru (true jeœli rozmioar pakietu jest w³aœciwy).  
+     * Metoda odbierajï¿½ca pakiety UDP z gniazda, wyciagajaca dane z pakietu i notyfikujï¿½ca wszystkich sï¿½uchaczy klasy receiverDataConverter o odbierze danych.
+     * @return boolean result - zwraca status odbioru (true jezli rozmioar pakietu jest wï¿½aï¿½ciwy).  
      */
     public boolean receive() throws IOException, InterruptedException {
     	
     	boolean result = false;
-    	buf = new byte[32768];
+    	buf = new byte[32768];//maksymalny rozmiar pakietu UDP
         DatagramPacket packet = new DatagramPacket(buf, buf.length);
         socket.receive(packet);
         
@@ -170,29 +170,58 @@ public class ReceiverUDPClient extends Thread{
                 bufferPos += 8;
                 //System.out.println(spectrumData[i]);
             }
-            //wszystkie dane pobrane - przekazanie ich do czekajÄ…cych wÄ…tkÃ³w
-            Platform.runLater(()-> receiverDataConverter.notifyData(spectrumData, rsequenceNumber, rtimeStamp, freqStart, freqStep ));//dziaÅ‚a ale sie lekko przycina
             
-            //blockingSpectrumDataQueue.add(new PacketConverter(rMagicWord, rsequenceNumber, rtimeStamp, rdataSize, freqStart, freqStep, spectrumData));            
+            //sprawdzanie poprawnoÅ›ci danych
+            if (rMagicWord == 0xAAAA5667)
+				 result = true;
+			else
+				result = false;
+            
+            if (rsequenceNumber >= 0)
+				 result = true;
+			else
+				result = false;
+              
+            if (rdataSize >= 256)
+				 result = true;
+			else
+				result = false;
+            
+            if (freqStart >= 250000)
+				 result = true;
+			else
+				result = false;
+            
+            if (freqStep >= 1)
+				 result = true;
+			else
+				result = false;
+            	
+            
+            //wszystkie dane pobrane - przekazanie ich do czekajÄ…cych wÄ…tkÃ³w
+            if(result)//jeÅ›li dane poprawne
+            	Platform.runLater(()-> receiverDataConverter.notifyData(spectrumData, rsequenceNumber, rtimeStamp, freqStart, freqStep ));//dziaÅ‚a ale sie lekko przycina
+            
+            //blockingSpectrumDataQueue.add(new PacketConverter(rMagicWord, rsequenceNumber, rtimeStamp, rdataSize, freqStart, freqStep, spectrumData));//testowane ale nie byÅ‚o poprawy dziaÅ‚ania            
             //sharedSpectrumDataPacket.setPacket(rMagicWord, rsequenceNumber, rtimeStamp, rdataSize, freqStart, freqStep, spectrumData);
 
             //wyï¿½wietlenie testowe
             //System.out.println("MW: " + rMagicWord + " rsequenceNumber: " + rsequenceNumber + " rtimeStamp: " + rtimeStamp);
             //System.out.println(" rdataSize: " + rdataSize + " freqStart: " + freqStart + " freqStep: " + freqStep);
-            result = true;
+            
         }
         //System.out.println(" Received packet length: " + packet.getLength() + " Reomte port: " + packet.getPort());
         return result;
 
     }
     /**
-     * Metoda zamykaj¹ca gniazdo 
+     * Metoda zamykajï¿½ca gniazdo 
      */
     public void close() { 		
         socket.close();
     }
     /**
-     * Metoda run w¹tku odbiorczego klienta UDP.  
+     * Metoda run watku odbiorczego klienta UDP. Cykliczne odbieranie pakietow UDP (maksymalnie 10000) lub oczekiwanie na nowy pakiet. Po przerwaniu pracy watku lub osiagnieciu maksymalnej liczby pakietow wysylanie do serwera odbiornika polecenia "end" - konczacego jego prace.  
      */
     public void run() {
 		running = true;
@@ -230,13 +259,13 @@ public class ReceiverUDPClient extends Thread{
 				
 			}
 			else {
-				running = false;//wy³¹czamy w¹tek klienta odbiorczego po 10000 pakietach (tymczasowo)
+				running = false;//wyï¿½ï¿½czamy wï¿½tek klienta odbiorczego po 10000 pakietach (tymczasowo)
 			}
 				
 
 		}
 		//koniec pracy 
-    	sendMsg("end ");//przesy³amy polecenie wy³aczenia serwera odbiornika
+    	sendMsg("end ");//przesyï¿½amy polecenie wyï¿½aczenia serwera odbiornika
 		close();//zamykamy gniazdo
 	}
 }
