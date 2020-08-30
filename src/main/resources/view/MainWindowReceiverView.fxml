@@ -28,18 +28,18 @@
         <menus>
           <Menu mnemonicParsing="false" text="Plik">
             <items>
-              <MenuItem mnemonicParsing="false" text="Wczytaj plik" />
-                  <MenuItem mnemonicParsing="false" text="Zakończ" />
+              <MenuItem mnemonicParsing="false" text="Wczytaj plik" visible="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#closeStageBtnHandler" text="Zakończ" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Odbiornik">
               <items>
-                <MenuItem mnemonicParsing="false" text="Ustawienia" />
-                  <MenuItem mnemonicParsing="false" text="Połącz (Odbieraj)" />
-                  <MenuItem mnemonicParsing="false" text="Rozłącz (Zatrzymaj)" />
+                <MenuItem mnemonicParsing="false" text="Ustawienia" visible="false" />
+                  <MenuItem fx:id="connectMenuItem" mnemonicParsing="false" onAction="#connectMenuItemHandler" text="Połącz (Odbieraj)" />
+                  <MenuItem fx:id="disconnectMenuItem" mnemonicParsing="false" onAction="#disconnectMenuItemHandler" text="Rozłącz (Zatrzymaj)" />
               </items>
             </Menu>
-          <Menu mnemonicParsing="false" text="Widok">
+          <Menu mnemonicParsing="false" text="Widok" visible="false">
             <items>
               <MenuItem mnemonicParsing="false" text="Opcje widoku" />
             </items>
@@ -54,7 +54,7 @@
       </MenuBar>
       <BorderPane fx:id="rightPane" layoutX="450.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="vboxCharts" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
                   <LineChart fx:id="lineChart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="573.0">
                     <xAxis>
@@ -85,15 +85,7 @@
          <bottom>
             <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label text="Próg detekcji [dBm]">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="20.0" right="10.0" />
-                     </HBox.margin>
-                  </Label>
-                  <TextField fx:id="tresholdField" prefWidth="50.0" text="95" />
+                  <TextField fx:id="tresholdField" prefWidth="50.0" text="95" visible="false" />
                </children>
             </HBox>
          </bottom>
@@ -170,12 +162,12 @@
          <left>
             <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="loadFileBtn" mnemonicParsing="false" onAction="#loadFileHandler" prefHeight="25.0" prefWidth="80.0" text="Wczytaj">
+                  <Button fx:id="loadFileBtn" mnemonicParsing="false" onAction="#loadFileHandler" prefHeight="25.0" prefWidth="80.0" text="Wczytaj" visible="false">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="saveFileBtn" mnemonicParsing="false" onAction="#saveFileHandler" prefHeight="25.0" prefWidth="80.0" text="Zapisuj">
+                  <Button fx:id="saveFileBtn" mnemonicParsing="false" onAction="#saveFileHandler" prefHeight="25.0" prefWidth="80.0" text="Zapisuj" visible="false">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -244,8 +236,8 @@
       </BorderPane>
       <ToolBar prefHeight="40.0" prefWidth="1280.0" AnchorPane.topAnchor="780.0">
          <items>
-            <Label text="Tu będą się wyświetlać informacje statusowe" />
-            <TextField />
+            <Label text="Status: " />
+            <TextField fx:id="tStatusField" prefHeight="25.0" prefWidth="928.0" />
          </items>
       </ToolBar>
    </children>
