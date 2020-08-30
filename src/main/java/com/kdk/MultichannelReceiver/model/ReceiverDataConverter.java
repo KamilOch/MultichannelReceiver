@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Klasa managera umozliwiajaca podlaczenie klas jako sluchaczy zdarzen o odbiorze danych widma z odbiornika
  * 
- * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
+ * @author Kamil Wilgucki k.wilgucki@wil.waw.pl
  */
 public class ReceiverDataConverter {
 	
@@ -47,7 +47,10 @@ public class ReceiverDataConverter {
 		//receivedPacket = blockingQueue.take();
 		
 		//receivedPacket = blockingQueue.poll(50, TimeUnit.MILLISECONDS);
-		receivedPacket = blockingQueue.poll();
+		if(blockingQueue!=null)
+			receivedPacket = blockingQueue.poll();
+		else
+			receivedPacket = null;
 //		if(receivedPacket!=null) {
 //			notify(receivedPacket.getSpectrumData(), receivedPacket.getDataSize(), receivedPacket.getSequenceNumber(), 
 //				receivedPacket.getTimeStamp(), receivedPacket.getFreqStart(), receivedPacket.getFreqStep());

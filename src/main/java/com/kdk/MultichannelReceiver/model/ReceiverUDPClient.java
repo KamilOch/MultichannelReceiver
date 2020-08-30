@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.sql.Timestamp;
@@ -22,7 +23,7 @@ import javafx.application.Platform;
 
 /**
  * Klasa klienta UDP odbierajacego dane z odbiornika i przekazujace odebrany i przepaklowany pakiet do klas sluchaczy poprzez wywolanie zdarzenia onDataReceived z klasy receiverDataConverter (notifyData)
- * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
+ * @author Kamil Wilgucki k.wilgucki@wil.waw.pl
  *
  */
 public class ReceiverUDPClient extends Thread{
@@ -137,7 +138,7 @@ public class ReceiverUDPClient extends Thread{
      * Metoda odbieraj�ca pakiety UDP z gniazda, wyciagajaca dane z pakietu i notyfikuj�ca wszystkich s�uchaczy klasy receiverDataConverter o odbierze danych.
      * @return boolean result - zwraca status odbioru (true jezli rozmioar pakietu jest w�a�ciwy).  
      */
-    public boolean receive() throws IOException, InterruptedException {
+    public boolean receive(boolean displayReceivedData) throws IOException, InterruptedException {
     	
     	boolean result = false;
     	buf = new byte[32768];//maksymalny rozmiar pakietu UDP
@@ -187,6 +188,11 @@ public class ReceiverUDPClient extends Thread{
 			else
 				result = false;
             
+            if (rdataSize<= 8192)
+				 result = true;
+			else
+				result = false;
+            
             if (freqStart >= 250000)
 				 result = true;
 			else
@@ -199,15 +205,17 @@ public class ReceiverUDPClient extends Thread{
             	
             
             //wszystkie dane pobrane - przekazanie ich do czekających wątków
-            if(result)//jeśli dane poprawne
+            if(result && (receiverDataConverter != null))//jeśli dane poprawne
             	Platform.runLater(()-> receiverDataConverter.notifyData(spectrumData, rsequenceNumber, rtimeStamp, freqStart, freqStep ));//działa ale sie lekko przycina
             
             //blockingSpectrumDataQueue.add(new PacketConverter(rMagicWord, rsequenceNumber, rtimeStamp, rdataSize, freqStart, freqStep, spectrumData));//testowane ale nie było poprawy działania            
             //sharedSpectrumDataPacket.setPacket(rMagicWord, rsequenceNumber, rtimeStamp, rdataSize, freqStart, freqStep, spectrumData);
 
             //wy�wietlenie testowe
-            //System.out.println("MW: " + rMagicWord + " rsequenceNumber: " + rsequenceNumber + " rtimeStamp: " + rtimeStamp);
-            //System.out.println(" rdataSize: " + rdataSize + " freqStart: " + freqStart + " freqStep: " + freqStep);
+            if(displayReceivedData) {
+            	System.out.println("MW: " + rMagicWord + " rsequenceNumber: " + rsequenceNumber + " rtimeStamp: " + rtimeStamp);
+            	System.out.println(" rdataSize: " + rdataSize + " freqStart: " + freqStart + " freqStep: " + freqStep);
+            }	
             
         }
         //System.out.println(" Received packet length: " + packet.getLength() + " Reomte port: " + packet.getPort());
@@ -233,7 +241,7 @@ public class ReceiverUDPClient extends Thread{
 
 				try {
 					boolean receiveResult = false;
-					receiveResult = receive();
+					receiveResult = receive(false);
 					System.out.println("Client received: " + receiveResult);
 					if(receiveResult)
 						packetCounter++;
@@ -265,7 +273,7 @@ public class ReceiverUDPClient extends Thread{
 
 		}
 		//koniec pracy 
-    	sendMsg("end ");//przesy�amy polecenie wy�aczenia serwera odbiornika
+    	//sendMsg("end ");//przesy�amy polecenie wy�aczenia serwera odbiornika
 		close();//zamykamy gniazdo
 	}
 }

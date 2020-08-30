@@ -62,6 +62,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@FXML private TextField fStepField;
 	@FXML private TextField seqNumberField;
 	@FXML private TextField timeStampField;
+	@FXML private TextField tStatusField;
 	@FXML private ImageView imageView;
 	@FXML private BorderPane rightPane;
 	@FXML private LineChart lineChart;
@@ -172,6 +173,8 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	@FXML
 	public void closeStageBtnHandler(){
 		
+		tStatusField.setText("Zamykanie aplikacji");
+		
 		if (bSimulation) {
 			tSimulator.interrupt();
 			try {
@@ -209,6 +212,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	public void receiveBtnHandler(){
 		
 		if(bReception) {//zatrzymanie odbioru
+			
 			udpClientThread.interrupt();
 			try {
 				udpClientThread.join();
@@ -225,6 +229,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 				e.printStackTrace();
 			}
 			bReception = false;
+			tStatusField.setText("Odłączenie od odbiornika");
 			
 		}
 		else {//uruchomienie odbioru pakietów UDP
@@ -235,6 +240,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 				System.out.println("UDPClient started");
 				receiveBtn.setText("Zatrzymaj");
 				bReception = true;
+				tStatusField.setText("Podłączenie do odbiornika");
 				
 				//dataConverter.startReceiving();
 				
@@ -298,6 +304,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	public void demoChartBtnHandler() {	
 		
 		if(bSimulation) {//wyłączenie symulacji
+			
 			tSimulator.interrupt(); 
 			try {
 				tSimulator.join();
@@ -306,8 +313,10 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 				e.printStackTrace();
 			}
 			bSimulation = false;
+			tStatusField.setText("Wyłączenie symulacji");
 		}
 		else {
+			tStatusField.setText("Uruchomienie symulacji");
 			Runnable runnableDataSimulator = () -> {
 				boolean End = false;
 				try {
@@ -340,11 +349,12 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 			double freqStep) {		
 		//przyk�adowe wy�wietleie danych
 		System.out.println("lineChart - onDataReceived");
+		tStatusField.setText("Odbiór danych");
 		seqNumberField.setText(Integer.toString(seqNumber));
 		timeStampField.setText(Double.toString(timeStamp));
 		fStartField.setText(Double.toString(freqStart));
 		fStepField.setText(Double.toString(freqStep));
-		
+		fStopField.setText(Double.toString(freqStart + dataSize*freqStep));
 //		Task task = new Task<Void> () {
 //		    @Override public Void call() {
 //		    	
