@@ -51,10 +51,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 /**
-* Klasa obslugujaca interface wykresow umieszczonyhc w srodkowej czesci aplikacji
+* Klasa obslugujaca interface wykresow umieszczonych w srodkowej czesci aplikacji
 * wraz z wszystkimi kontrolkami obslugujacymi wykresy.
-* . . .
-* @autor Damian Garsta / damiangarsta@wp.pl
+* @author Damian Garsta / damiangarsta@wp.pl
 * @version 1.0
 */
 public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListener, ReceiverDataConverterListener {
@@ -91,7 +90,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 
 	/**
 	* Metoda implementujaca interface Comparator dla kolejki serii danych wyswietlanych na wykresie 1D.
-	* . . .
 	* @param o1 element do porownania 1
 	* @param o2 element do porownania 2
 	* @return wynik porownania uzyty do ustawiania elementow w kolejce wyswietlania
@@ -109,7 +107,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 
 	/**
 	* Konstruktor
-	* . . .
 	* @param dataConverter obiekt klasy do ktorej dopina sie nasluchiwacza otrzymywania danych
 	* @param vboxCharts obiekt na scenie do ktorego dodaje sie wykresy i wszystkie kontrolki obslugujace wykresy
 	*/
@@ -123,8 +120,7 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	}
 
 	/**
-	* Klasa podpinajaca metody obslugujace graficzny interface wykresow.
-	* . . .
+	* Metoda podpinajaca zdarzenia obslugujace graficzny interface wykresow.
 	* @param vboxCharts obiekt na scenie do ktorego dodaje sie wykresy i wszystkie kontrolki obslugujace wykresy
 	*/
 	public void start(VBox vboxCharts) {
@@ -280,7 +276,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 
 	/**
 	* Metoda wykorzystana tylko do testowania tej klasy. Generuje ona dane do wywietlania.
-	* . . .
 	* @param bStop informuje czy rozpoczac dostarczanie danych czy tez zatrzymac
 	*/
 	private void startChangingChart(boolean bStop) {
@@ -763,7 +758,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	/**
 	* Metoda podlaczajaca obsluge zdarzen potrzebna dla pokazywania linii pionowej na wykresie 1D
 	* wskazujacej zaznaczona czestotliwosc (os X).
-	* . . .
 	* @param line obiekt linii
 	* @param chart obiekt wykresu 1D
 	*/
@@ -814,7 +808,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	/**
 	* Metoda podlaczajaca obsluge zdarzen potrzebna dla pokazywania linii poziomej na wykresie 1D
 	* wskazujacej prog detekcji (os Y).
-	* . . .
 	* @param lineHor obiekt linii
 	* @param chart obiekt wykresu 1D
 	*/
@@ -877,7 +870,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	/**
 	* Metoda rysujaca linie pozioma na wykresie 1D
 	* wskazujacej zaznaczona czestotliwosc (os X).
-	* . . .
 	* @param lineHor obiekt linii
 	* @param y wartosc rzednej na scenie
 	*/
@@ -892,7 +884,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	/**
 	* Metoda rysujaca linie pionowa na wykresie 1D
 	* wskazujacej wybrany prog detekcji (os Y).
-	* . . .
 	* @param lineVert obiekt linii
 	* @param x wartosc na osi odcietych na scenie
 	*/
@@ -915,7 +906,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	* Metoda uaktualniajaca linie pionowa na wykresie 1D
 	* wskazujacej wybrany prog detekcji (os Y)
 	* na podstawie pola tekstowego.
-	* . . .
 	* @param lineVert obiekt linii
 	*/
 	private void update_lineVert(Line lineVert) {
@@ -931,7 +921,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	* Metoda uaktualniajaca linie pozioma na wykresie 1D
 	* wskazujacej wybrana czestotliwosc (os X)
 	* na podstawie pola tekstowego.
-	* . . .
 	* @param lineHor obiekt linii
 	*/
 	private void update_lineHor(Line lineHor) {
@@ -947,7 +936,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	/**
 	* Metoda podlaczajaca obsluge zdarzen dla pol tekstowych dla wartosci progu detekcji (na osi Y) oraz 
 	* czestotliwosci zaznaczonej (na osi X).
-	* . . .
 	* @param xField pole tekstowe dla wybranej czestotliwosci na osi X
 	* @param yField pole tekstowe dla wybranego progu detekcji na osi Y
 	* @param chart obiekt wykresu 1D
@@ -1031,7 +1019,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	/**
 	* Metoda interface SpectrumWaterfallListener wywolywana przy aktualizacji wykresu Waterfall 
 	* czestotliwosci zaznaczonej (na osi X).
-	* . . .
 	* @param waterfallImage obrazek wykresu Waterfall ktory ma byc aktualnie pokazany
 	* @param seqNumber numer sekwencji (wartosc nie obslugiwana przez klase)
 	* @param timeStamp numer probki danych
@@ -1232,7 +1219,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	
 	/**
 	* Metoda interface ReceiverDataConverterListener wywolywana w momencie otrzymania nowych danych.
-	* . . .
 	* @param receivedData nowe dane w postaci tabeli
 	* @param dataSize rozmiar tabeli danych
 	* @param seqNumber numer sekwencji (wartosc nie obslugiwana przez klase)
@@ -1259,9 +1245,8 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 
 	/**
 	* Klasa wewnetrzna obslugujaca dane ktore maja wyswietlic sie na wykresach
-	* obiekty tej klasy sa gromadzone w kolejce do wyswietlenia
-	* . . .
-	* @autor Damian Garsta / damiangarsta@wp.pl
+	* obiekty tej klasy sa gromadzone w kolejce do wyswietlenia.
+	* @author Damian Garsta / damiangarsta@wp.pl
 	* @version 1.0
 	*/
 	class ReceivedDataWithTimeStamp {
@@ -1272,7 +1257,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 
 		/**
 		* Konstruktor
-		* . . .
 		* @param receivedData nowe dane w postaci tabeli
 		* @param timeStamp numer probki danych
 		* @param freqStart poczatkowy zakres czestotliwosci wyswietlanych
@@ -1287,7 +1271,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 		
 		/**
 		* Metoda formatujaca dane na postac akceptowalna przez wykres.
-		* . . .
 		* @return zwaraca liste tworzaca serie danych dla wykresu
 		*/
 		ObservableList<XYChart.Data<Number, Number>> getXYChartData() {
@@ -1305,7 +1288,6 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 	
 	/**
 	* Metoda pobiera wybrany element z kolejki zawieracacej 150 serii danych.
-	* . . .
 	* @param iElementFrom1 numer serii danych ktora nalezy zwrocic liczana od 1
 	* @param queue kolejka z ktorej nalezy zwrocic serie danych
 	* @return lista zwieracaja serie danych dla wykresu 1D
