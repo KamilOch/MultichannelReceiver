@@ -48,9 +48,9 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 	}
 
 	/**
-	 * Dodaje s�uchcza zdarze� odebrania danych.
+	 * Dodaje słuchcza zdarzeń odebrania danych.
 	 *
-	 * @param listener - dodawany s�uchacz
+	 * @param listener - dodawany słuchacz
 	 */
 	public void addListener(SpectrumWaterfallListener listener) {
 		if (listener != null) {
@@ -59,9 +59,9 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 	}
 
 	/**
-	 * Usuwa s�uchacza zdarze� odebrania danych.
+	 * Usuwa słuchacza zdarzeń odebrania danych.
 	 *
-	 * @param listener - usuwany s�ychacz
+	 * @param listener - usuwany słychacz
 	 */
 	public void removeListener(SpectrumWaterfallListener listener) {
 		if (listener != null) {

@@ -13,10 +13,9 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 /**
- * Zawiera zbi�r statycznych metod do konwersji i oblicze�
+ * Zawiera zbiór statycznych metod do konwersji i obliczeń
  *
- * @author Robert Urban <r.urban@wil.waw.pl>
- * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
+ * @author Kamil Wilgucki / k.wilgucki@wil.waw.pl
  * 
  */
 public class UsefulConvertFunctions {

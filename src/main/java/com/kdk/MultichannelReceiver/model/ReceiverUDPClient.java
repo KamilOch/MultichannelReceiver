@@ -1,21 +1,13 @@
 package com.kdk.MultichannelReceiver.model;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import java.nio.ByteOrder;
-import java.sql.Timestamp;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import com.kdk.MultichannelReceiver.model.utils.PacketConverter;
 import com.kdk.MultichannelReceiver.model.utils.UsefulConvertFunctions;
-
 import javafx.application.Platform;
+
+import java.io.IOException;
+import java.net.*;
+import java.nio.ByteOrder;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 
@@ -40,13 +32,14 @@ public class ReceiverUDPClient extends Thread{
     
     /**
      * Konstruktor Klasy ReceiverUDPClient.
-     * @param String ipAddress - adres IP serwera UDP streamuj�cego dane pomiarowe
-     * @param int receivePort - numer portu na kt�ey dane s� przey�ane (domyslnie 4445)
-     * @param PacketConverter spectrumDataPacket - klasa pakietu z odebranymi danymi z odbiornika
-     * @param ReceiverDataConverter dataConverter - klasa managera umozliwiajaca podlaczenie klas jako sluchaczy zdarzen o odbiorze danych widma z odbiornika
-     * @param ConcurrentLinkedQueue<PacketConverter> blockingQueue - (nieu�ywana ze wzgl�du na s�ab� wydajno��) kolejka FIFO z odebranymi pakiertami danych spectrumDataPacket z odbiornika doo dalszego przetwarzania
-     * @param receivedRecordOneRawEntityRepository repozytorium zapisanych rekordów, zapis w 1 linii (krotce)
-	 * @throws SocketException, UnknownHostException - rzucane wyj�tki  
+     * @param ipAddress - adres IP serwera UDP streamującego dane pomiarowe
+     * @param receivePort - numer portu na który dane są przesyłane (domyslnie 4445)
+     * @param spectrumDataPacket - klasa pakietu z odebranymi danymi z odbiornika
+     * @param dataConverter - klasa managera umozliwiajaca podlaczenie klas jako sluchaczy zdarzen o odbiorze danych widma z odbiornika
+     * @param blockingQueue - (nieużywana ze względu na słabą wydajność) kolejka FIFO z odebranymi pakiertami danych spectrumDataPacket z odbiornika doo dalszego przetwarzania
+//     * @param receivedRecordOneRawEntityRepository repozytorium zapisanych rekordów, zapis w 1 linii (krotce)
+	 * @throws SocketException - rzucane wyjątki
+	 * @throws UnknownHostException - rzucane wyjątki
      */
     public ReceiverUDPClient(String ipAddress, int receivePort, PacketConverter spectrumDataPacket, ReceiverDataConverter dataConverter, ConcurrentLinkedQueue<PacketConverter> blockingQueue) throws SocketException, UnknownHostException {
 		super();
@@ -75,8 +68,9 @@ public class ReceiverUDPClient extends Thread{
 //	}
     /**
      * Uproszcony konstruktor Klasy ReceiverUDPClient.
-     * @param String ipAddress - adres IP serwera UDP streamuj�cego dane pomiarowe na port 4445
-	 * @throws SocketException, UnknownHostException - rzucane wyj�tki  
+     * @param ipAddress - adres IP serwera UDP streamującego dane pomiarowe na port 4445
+	 * @throws SocketException - rzucane wyjątki
+	 * @throws UnknownHostException - rzucane wyjątki
      */ 
 	public ReceiverUDPClient(String ipAddress) throws SocketException, UnknownHostException {
         socket = new DatagramSocket(4445);
@@ -88,7 +82,7 @@ public class ReceiverUDPClient extends Thread{
     }
 	
 	/**
-     * Metoda zwracaj�ca adres IP swerwera odbiornika.
+     * Metoda zwracająca adres IP swerwera odbiornika.
      * @return InetAddress address - zwraca odres IP serwera.  
      */ 
     public InetAddress getAddress() {
@@ -96,16 +90,16 @@ public class ReceiverUDPClient extends Thread{
 	}
 
     /**
-     * Metoda zwracaj�ca numer portu do nas�uchu danych z serwera odbiornika.
-     * @return int receivePort - zwraca numer portu na kt�rym nas�uchuje danych z serwera odbiornika.  
+     * Metoda zwracająca numer portu do nasłuchu danych z serwera odbiornika.
+     * @return int receivePort - zwraca numer portu na którym nasłuchuje danych z serwera odbiornika.
      */ 
 	public int getReceivePort() {
 		return receivePort;
 	}
 
 	/**
-     * Metoda wysy�aj�ca pakiet UDP (komendy "end" do serwera odbiornika kończacej jego prace).
-     * @param String msg - wysy�any pakiet typu String. 
+     * Metoda wysyłająca pakiet UDP (komendy "end" do serwera odbiornika kończacej jego prace).
+     * @param msg - wysyłany pakiet typu String.
      * @return String received - zwraca odebrany pakiet odpowiedzi.  
      */ 
     public String sendMsg(String msg) {
@@ -135,8 +129,8 @@ public class ReceiverUDPClient extends Thread{
     }
     
     /**
-     * Metoda odbieraj�ca pakiety UDP z gniazda, wyciagajaca dane z pakietu i notyfikuj�ca wszystkich s�uchaczy klasy receiverDataConverter o odbierze danych.
-     * @return boolean result - zwraca status odbioru (true jezli rozmioar pakietu jest w�a�ciwy).  
+     * Metoda odbierająca pakiety UDP z gniazda, wyciagajaca dane z pakietu i notyfikująca wszystkich słuchaczy klasy receiverDataConverter o odbierze danych.
+     * @return boolean result - zwraca status odbioru (true jezli rozmioar pakietu jest właściwy).
      */
     public boolean receive(boolean displayReceivedData) throws IOException, InterruptedException {
     	
@@ -307,7 +301,7 @@ public class ReceiverUDPClient extends Thread{
 
     }
     /**
-     * Metoda zamykaj�ca gniazdo 
+     * Metoda zamykająca gniazdo
      */
     public void close() { 		
         socket.close();

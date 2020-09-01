@@ -1,15 +1,11 @@
 package com.kdk.MultichannelReceiver.model;
 
+import com.kdk.MultichannelReceiver.model.utils.PacketConverter;
+import javafx.application.Platform;
 import org.apache.commons.lang3.event.EventListenerSupport;
 
-import com.kdk.MultichannelReceiver.model.utils.PacketConverter;
-
-import javafx.application.Platform;
-
 import java.sql.Timestamp;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Klasa managera umozliwiajaca podlaczenie klas jako sluchaczy zdarzen o odbiorze danych widma z odbiornika
@@ -28,7 +24,7 @@ public class ReceiverDataConverter {
 
 	/**
      * Konstruktor klasy ReceiverDataConverter
-     * @param ConcurrentLinkedQueue<PacketConverter> blockingSpectrumDataQueue - kolejka FIFO z pakitami typu PacketConverter z odbiornika
+     * @param blockingSpectrumDataQueue - kolejka FIFO z pakitami typu PacketConverter z odbiornika
      */  
 	public ReceiverDataConverter(ConcurrentLinkedQueue<PacketConverter> blockingSpectrumDataQueue) {
 		this.repetitionCounter = 0;
@@ -170,8 +166,9 @@ public class ReceiverDataConverter {
 	/**
      * Dodaje sluchcza zdarzen odebrania danych.
      *
-     * @param ReceiverDataConverterListener listener - dodawany s�uchacz
+     * @param listener - dodawany słuchacz
      */
+
 	public void addListener(ReceiverDataConverterListener listener) {
         if (listener != null) {
         	receiverDataConverterListeners.addListener(listener);
@@ -181,7 +178,7 @@ public class ReceiverDataConverter {
     /**
      * Usuwa sluchacza zdarzen odebrania danych.
      *
-     * @param ReceiverDataConverterListener listener - usuwany sluchacz
+     * @param listener - usuwany sluchacz
      */
     public void removeListener(ReceiverDataConverterListener listener) {
         if (listener != null) {
@@ -192,8 +189,14 @@ public class ReceiverDataConverter {
     /**
      * Notyfikuje wszystkich zarejestowanych sluchaczy o nowych odebranych danych.
      *
-     * @param ReceiverDataConverterListener listener - usuwany sluchacz
+	 * @param receivedData tablica zawierajaca poziomy sygnałów
+	 * @param dataSize ilość częstotliwości
+	 * @param seqNumber - numer sekwencyjny ostatniej linni obrazu
+	 * @param timeStamp - znacznik czasu ostatniej linni obrazu
+	 * @param freqStart - częstotliwosć startowa danych ostatniej linii obrazu
+	 * @param freqStep - krok częstotliwosci dla danych ostatniej linii obrazu
      */
+
     private static void notify(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart, double freqStep) {
         
             if (receivedData != null) {

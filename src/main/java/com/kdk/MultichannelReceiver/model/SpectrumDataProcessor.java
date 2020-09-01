@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 
 	private RecordService recordService;
-	double threshold;// pr�g decyzyjny powy�ej kt�rego wszystkie przekroczenia poziomu widma
-						// traktujemy jako sygna�y uzyteczne
+	double threshold;// próg decyzyjny powyżej którego wszystkie przekroczenia poziomu widma
+						// traktujemy jako sygnały uzyteczne
 	private static final EventListenerSupport<SpectrumDataProcessorListener> spectrumDataProcessorListener = new EventListenerSupport<>(
 			SpectrumDataProcessorListener.class);
 

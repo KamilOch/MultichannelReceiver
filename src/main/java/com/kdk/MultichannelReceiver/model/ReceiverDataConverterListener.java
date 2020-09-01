@@ -8,7 +8,7 @@ package com.kdk.MultichannelReceiver.model;
  * Interfejs dla sluchaczy klasy ReceiverDataConverter. 
  * Zdrzenie onError - do przekazywania bledow typu String.
  * Zdarzenie onDataReceived - do przekazywania odebranych danych widma z odbiornika.   
- * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
+ * @author Kamil Wilgucki / k.wilgucki@wil.waw.pl
  */
 
 public interface ReceiverDataConverterListener {

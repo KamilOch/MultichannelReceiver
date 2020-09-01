@@ -3,7 +3,7 @@ package com.kdk.MultichannelReceiver.model;
 /**
  * Klasa przechowująca jedno pole przetworzonych danych spectrum po progowaniu - do wyświetlenia w tabeli
  * 
- * @author Kamil Wilgucki <k.wilgucki@wil.waw.pl>
+ * @author Kamil Wilgucki / k.wilgucki@wil.waw.pl
  */
 
 public class ProcessedDataForTableView {

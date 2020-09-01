@@ -168,7 +168,7 @@ public class RecordService {
      * @param dataSize ilość częstotliwości
      * @param frequencyTable tabela częstotliwości
      * @param receivedData tablica zawierajaca poziomy sygnałów
-     * @param idFromDB id zapisanego recordu w bazie danych
+     * @param idFromDB id zapisanego rekordu w bazie danych
      */
     private void saveReceivedRecordOneRowEntityInDb(int dataSize, FrequencyTable frequencyTable, double[] receivedData, long idFromDB) {
         String allFrequency = "";

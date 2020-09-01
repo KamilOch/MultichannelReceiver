@@ -62,7 +62,7 @@ class WrappedImageView extends ImageView
     
 	/**
 	* Metoda nadpisujaca metode klasy ImageView dla okreslenia minimalnej wysokosci.
-	* @param width minimalna wysokosc
+	* @param height minimalna wysokosc
 	* @return zwraca zawsze okreslona wartosc
 	*/
     @Override
@@ -73,7 +73,7 @@ class WrappedImageView extends ImageView
     
 	/**
 	* Metoda nadpisujaca metode klasy ImageView dla okreslenia preferowanej wysokosci.
-	* @param width preferowana wysokosc
+	* @param height preferowana wysokosc
 	* @return zwraca wysokosc obrazka
 	*/
     @Override
@@ -86,7 +86,7 @@ class WrappedImageView extends ImageView
 
 	/**
 	* Metoda nadpisujaca metode klasy ImageView dla okreslenia maksymalnej wysokosci.
-	* @param width maksymalna wysokosc
+	* @param height maksymalna wysokosc
 	* @return zwraca zawsze okreslona wartosc
 	*/
     @Override
