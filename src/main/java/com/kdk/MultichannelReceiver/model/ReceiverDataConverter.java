@@ -37,6 +37,7 @@ public class ReceiverDataConverter {
 //		this.blockingQueue = blockingSpectrumDataQueue;
 //	}
 	
+	//metoda testowa - na razie niewykorzystywana
 	public void getDataFromQueue() throws InterruptedException {
 		PacketConverter receivedPacket;
 	
@@ -58,6 +59,7 @@ public class ReceiverDataConverter {
 		}
 				
 	}
+	//metoda testowa - na razie niewykorzystywana
 	public void startReceiving() {
 		
 		Runnable receivingTask = () -> {
@@ -81,6 +83,7 @@ public class ReceiverDataConverter {
 
 		
 	}
+	//metoda testowa - na razie niewykorzystywana
 	public void stopReceiving() {
 		readingThread.interrupt();
 
@@ -91,12 +94,7 @@ public class ReceiverDataConverter {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	
-	
-	
-	
+	}	
 	
 	/**
 	 * Przekazuje dane z odbiornika do zarejestrowanych sluchaczy klasy
@@ -168,7 +166,6 @@ public class ReceiverDataConverter {
      *
      * @param listener - dodawany słuchacz
      */
-
 	public void addListener(ReceiverDataConverterListener listener) {
         if (listener != null) {
         	receiverDataConverterListeners.addListener(listener);
@@ -196,7 +193,6 @@ public class ReceiverDataConverter {
 	 * @param freqStart - częstotliwosć startowa danych ostatniej linii obrazu
 	 * @param freqStep - krok częstotliwosci dla danych ostatniej linii obrazu
      */
-
     private static void notify(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart, double freqStep) {
         
             if (receivedData != null) {

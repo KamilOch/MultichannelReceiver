@@ -130,7 +130,7 @@ public class ReceiverUDPClient extends Thread{
     
     /**
      * Metoda odbierająca pakiety UDP z gniazda, wyciagajaca dane z pakietu i notyfikująca wszystkich słuchaczy klasy receiverDataConverter o odbierze danych.
-     * @return boolean result - zwraca status odbioru (true jezli rozmioar pakietu jest właściwy).
+     * @return boolean result - zwraca status odbioru (true jezli rozmiar pakietu i dane są właściwe).
      */
     public boolean receive(boolean displayReceivedData) throws IOException, InterruptedException {
     	
@@ -142,7 +142,7 @@ public class ReceiverUDPClient extends Thread{
     
         
         int data_size = packet.getLength();
-        if (data_size >= 2092) {
+        if (data_size >= 2092) {//sparawdzanie minimalnego właściwego rozmiaru danych
             int bufferPos = 0;
             byte[] dataReceived = packet.getData();
             int rMagicWord = UsefulConvertFunctions.GetIntFromBEBuffer(dataReceived, bufferPos, 4);
@@ -216,6 +216,11 @@ public class ReceiverUDPClient extends Thread{
         return result;
 
     }
+    
+    /**
+     * Metoda testowa odbierająca pakiety UDP z gniazda, wyciagajaca dane z pakietu i notyfikująca wszystkich słuchaczy klasy receiverDataConverter o odbierze danych (bez pośrednictwa FX'a).
+     * @return boolean result - zwraca status odbioru (true jeżeli dane są właściwe).
+     */
     public boolean receiveTest(boolean displayReceivedData) throws IOException, InterruptedException {
     	
     	boolean result = false;
@@ -307,7 +312,7 @@ public class ReceiverUDPClient extends Thread{
         socket.close();
     }
     /**
-     * Metoda run watku odbiorczego klienta UDP. Cykliczne odbieranie pakietow UDP (maksymalnie 10000) lub oczekiwanie na nowy pakiet. Po przerwaniu pracy watku lub osiagnieciu maksymalnej liczby pakietow wysylanie do serwera odbiornika polecenia "end" - konczacego jego prace.  
+     * Metoda run watku odbiorczego klienta UDP. Cykliczne odbieranie pakietow UDP (maksymalnie 10000) lub oczekiwanie na nowy pakiet. 
      */
     public void run() {
 		running = true;
@@ -351,17 +356,19 @@ public class ReceiverUDPClient extends Thread{
 
 		}
 		//koniec pracy 
-    	//sendMsg("end ");//przesy�amy polecenie wy�aczenia serwera odbiornika
+    	//sendMsg("end ");//przesy�amy polecenie wyłaczenia serwera odbiornika
 		close();//zamykamy gniazdo
 	}
-    
+    /**
+     * Metoda testowa run watku odbiorczego klienta UDP (bez FX'a). Cykliczne odbieranie pakietow UDP (maksymalnie 10) lub oczekiwanie na nowy pakiet. Po przerwaniu pracy watku lub osiagnieciu maksymalnej liczby pakietow wysylanie do serwera odbiornika polecenia "end" - konczacego jego prace.  
+     */
     public void runTest() {
 		running = true;
 		int packetCounter = 0;
 		
 		while (running) {
 
-			if (packetCounter < 100) {
+			if (packetCounter < 10) {
 
 				try {
 					boolean receiveResult = false;

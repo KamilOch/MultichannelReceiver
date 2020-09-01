@@ -211,6 +211,9 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		;
 	}
 
+	/**
+	 * Uruchamia odbiór danych z odbiornika
+	 */
 	@FXML
 	public void connectMenuItemHandler(){
 		
@@ -240,6 +243,9 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	}
 
 
+	/**
+	 * Zatrzymuje odbiór danych z odbiornika
+	 */
 	@FXML 
 	public void disconnectMenuItemHandler(){
 		
@@ -265,7 +271,9 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 			
 		}
 	}
-	
+	/**
+	 * Uruchamia odbiór danych z odbiornika i go zatrzymuje jeżeli dane są odbierane
+	 */
 	@FXML 
 	public void receiveBtnHandler(){
 		
@@ -318,6 +326,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	public void databaseBtnHandler(){
 		;
 	}
+	//Metoda testowa - do poprawy
 	@FXML
 	public void loadFileHandler() {
 		
@@ -352,12 +361,15 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 
 		}
 	}
+	//Metoda testowa
 	@FXML
 	public void saveFileHandler() {
 		;
 	}
 	
-	//wyświetla dane lokalnie generowane losowo 
+	/**
+	 * 	Wyświetla dane testowe lokalnie generowane losowo 
+	 */
 	@FXML
 	public void demoChartBtnHandler() {	
 		
@@ -401,7 +413,17 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	/**
+	 * Zdarzenie onDataReceived - do przekazywania odebranych danych widma z odbiornika.
+	 *
+	 * @param double[] receivedData - odebrane dane widma z odbiornika
+	 * @param dataSize - rozmiar danych widma (ilość próbek częstotliwości)
+	 * @param seqNumber - numer sekwencyjny ostatniego pakietu danych
+	 * @param timeStamp - znacznik czasu ostatniego pakietu danych
+	 * @param freqStart - częstotliwosć startowa danych ostatniego pakietu danych
+	 * @param freqStep - krok częstotliwosci dla danych ostatniego pakietu danych
+	 */
 	@Override
 	public void onDataReceived(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart,
 			double freqStep) {		
@@ -447,6 +469,15 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		
 	}
 
+	/**
+	 * Zdarzenie onImageProcessed - do przekazywania odebranych przetworzonego obrazu do wyświetlenia.
+	 *
+	 * @param WritableImage waterfallImage - obraz waterfall z danymi widma z odbiornika do wyświetlenia
+	 * @param seqNumber - numer sekwencyjny ostatniego pakietu danych
+	 * @param timeStamp - znacznik czasu ostatniego pakietu danych
+	 * @param freqStart - częstotliwosć startowa danych ostatniego pakietu danych
+	 * @param freqStep - krok częstotliwosci dla danych ostatniego pakietu danych
+	 */
 	@Override
 	public void onImageProcessed(WritableImage waterfallImage, int seqNumber, double timeStamp, double freqStart,
 			double freqStep) {
@@ -458,6 +489,15 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		
 	}
 
+	/**
+	 * Zdarzenie onDataProcessed - do przekazywania wykrytych sygnałów do wyświetlenia.
+	 *
+	 * @param double[] frequency - tablica wykrytych częstotliwości do wyświetlenia
+	 * @param double[] signalLevel - tablica poziomów sygnału wykrytych częstotliwości do wyświetlenia 
+	 * @param int seqNumber - numer sekwencyjny ostatniego pakietu danych
+	 * @param int timeStamp - znacznik czasu ostatniego pakietu danych
+	 * @param double threshold - poziom progowania powyżej którego są wykrywane sygnały
+	 */
 	@Override
 	public void onDataProcessed(double[] frequency, double[] signalLevel, int seqNumber, double timeStamp,
                                 double threshold) {
