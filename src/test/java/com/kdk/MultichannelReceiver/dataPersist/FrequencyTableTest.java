@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/***
+ * @author Kamil Ochnik
+ */
 class FrequencyTableTest {
 
     private final FrequencyTable testFrequencyTable = new FrequencyTable();
