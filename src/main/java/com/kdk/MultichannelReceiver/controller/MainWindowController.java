@@ -11,10 +11,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -213,10 +215,17 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(primaryStage);
-        VBox dialogVbox = new VBox(20);
+        VBox dialogVbox = new VBox(5);
+        dialogVbox.setAlignment(Pos.BOTTOM_CENTER);
         dialogVbox.getChildren().add(new Text("O programie"));
+        dialogVbox.getChildren().add(new Separator());
+        dialogVbox.getChildren().add(new Separator());
         dialogVbox.getChildren().add(new Text("Aplikacja klienta odbiornika radiowego."));
+        dialogVbox.getChildren().add(new Separator());
         dialogVbox.getChildren().add(new Text("Autorzy: Damian Garsta, Kamil Ochnik, Kamil Wilgucki"));
+        dialogVbox.getChildren().add(new Separator());
+        dialogVbox.getChildren().add(new Separator());
+       
         
         Button closeDialogBtn = new Button("Zamknij");
         closeDialogBtn.setOnAction(new EventHandler<ActionEvent>() {
