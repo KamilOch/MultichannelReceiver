@@ -325,7 +325,7 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
                                     // W SOBOTE ZAUWAZYLEM ZE JEZELI JEST POZA WATKIEM TA FUNKCJA
                                     // TO WYSKAKUJE BLAD PRZY ODSWIEZANIU WATERFALL:
                                     // BO CHYBA CHCE ODSWIEZYC ELEMENT JAVAFX WIEC MUSI BYC W runLater:
-                                    dataConverter.convertData();
+                                    dataConverter.generateDemoData();
 
                                     done = true;
 

@@ -381,7 +381,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 				boolean End = false;
 				try {
 					while (!End) {
-						Platform.runLater(()->dataConverter.convertData());
+						Platform.runLater(()->dataConverter.generateDemoData());
 						Thread.sleep(100);
 					}
 				} catch (InterruptedException e) {

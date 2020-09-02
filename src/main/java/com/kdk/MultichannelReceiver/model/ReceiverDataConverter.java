@@ -110,7 +110,7 @@ public class ReceiverDataConverter {
 	/**
      * Generuje dane losowe w trybie demo i powiadamia sluchaczy
      */  
-	public void convertData() {
+	public void generateDemoData() {
 		
 		int dataSize = 256;
 		int seqNumber = 1;
