@@ -1,15 +1,11 @@
 package com.kdk.MultichannelReceiver.model;
 
-import java.net.SocketException;
-import java.net.UnknownHostException;
-
-import org.apache.commons.lang3.event.EventListenerSupport;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import org.apache.commons.lang3.event.EventListenerSupport;
 
 /**
  * Klasa SpectrumWaterfall do tworzenia obrazu 2D widma w funkcji czasu
@@ -29,7 +25,7 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 	
 	/**
      * Konstruktor Klasy SpectrumWaterfall.
-     * @param int spectrumDataSize - długość danych widma do wyświetlenia - czyli szerokość wyświetlanego obrazu
+     * @param spectrumDataSize - długość danych widma do wyświetlenia - czyli szerokość wyświetlanego obrazu
      */
 	public SpectrumWaterfall(int spectrumDataSize) {
 		super();
@@ -44,8 +40,8 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 		
 	/**
      * Konstruktor Klasy SpectrumWaterfall.
-     * @param int spectrumDataSize - długość danych widma do wyświetlenia - czyli szerokość wyświetlanego obrazu
-     * @param int maxImageLines - wysokość obrazu, inaczej liczba wyświetlanych linii widma w obrazie (wielkość okna czasowego)     
+     * @param waterfallLength - długość danych widma do wyświetlenia - czyli szerokość wyświetlanego obrazu
+     * @param maxImageLines - wysokość obrazu, inaczej liczba wyświetlanych linii widma w obrazie (wielkość okna czasowego)
      */
 	public SpectrumWaterfall(int waterfallLength, int maxImageLines) {
 		super();
@@ -84,7 +80,7 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 	/**
 	 * Wpisuje nową linię odebranych danych na dole obrazu waterfall.
 	 *
-	 * @param double[] receivedData - odebrane dane widma z odbiornika
+	 * @param receivedData - odebrane dane widma z odbiornika
 	 */
 	private void fillImageLine(double[] receivedData) {
 		// TO DO
@@ -112,7 +108,7 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 	/**
 	 * Zdarzenie onDataReceived - do przekazywania odebranych danych widma z odbiornika.
 	 *
-	 * @param double[] receivedData - odebrane dane widma z odbiornika
+	 * @param receivedData - odebrane dane widma z odbiornika
 	 * @param dataSize - rozmiar danych widma (ilość próbek częstotliwości)
 	 * @param seqNumber - numer sekwencyjny ostatniego pakietu danych
 	 * @param timeStamp - znacznik czasu ostatniego pakietu danych
@@ -158,7 +154,7 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 	/**
 	 * Metoda kopiująca obraz.
 	 *
-	 * @param double[] receivedData - odebrane dane widma z odbiornika
+	 * @param image - obraz
 	 */
 	public static WritableImage copyImage(Image image) {
 		int height = (int) image.getHeight();
@@ -179,7 +175,7 @@ public class SpectrumWaterfall implements ReceiverDataConverterListener {
 	/**
 	 * Metoda kopiująca obraz z wyjątkiem pierwszej linni (najstarszych danych).
 	 *
-	 * @param double[] receivedData - odebrane dane widma z odbiornika
+	 *
 	 */
 	public void copyImage() {
 		int height = this.maxImageLines;

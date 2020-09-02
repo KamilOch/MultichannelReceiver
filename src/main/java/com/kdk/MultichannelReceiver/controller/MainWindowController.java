@@ -1,28 +1,10 @@
 package com.kdk.MultichannelReceiver.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.nio.file.Paths;
-import java.util.Scanner;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import org.springframework.stereotype.Component;
-
 import com.kdk.MultichannelReceiver.Main;
 import com.kdk.MultichannelReceiver.controllerCharts.PRK_4ZoomableLineChart_2c_clean;
 import com.kdk.MultichannelReceiver.dataPersist.RecordService;
-import com.kdk.MultichannelReceiver.model.ProcessedDataForTableView;
-import com.kdk.MultichannelReceiver.model.ReceiverDataConverter;
-import com.kdk.MultichannelReceiver.model.ReceiverDataConverterListener;
-import com.kdk.MultichannelReceiver.model.ReceiverUDPClient;
-import com.kdk.MultichannelReceiver.model.SpectrumDataProcessor;
-import com.kdk.MultichannelReceiver.model.SpectrumDataProcessorListener;
-import com.kdk.MultichannelReceiver.model.SpectrumWaterfall;
-import com.kdk.MultichannelReceiver.model.SpectrumWaterfallListener;
+import com.kdk.MultichannelReceiver.model.*;
 import com.kdk.MultichannelReceiver.model.utils.PacketConverter;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,11 +18,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.nio.file.Paths;
+import java.util.Scanner;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
@@ -417,7 +407,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	/**
 	 * Zdarzenie onDataReceived - do przekazywania odebranych danych widma z odbiornika.
 	 *
-	 * @param double[] receivedData - odebrane dane widma z odbiornika
+	 * @param receivedData - odebrane dane widma z odbiornika
 	 * @param dataSize - rozmiar danych widma (ilość próbek częstotliwości)
 	 * @param seqNumber - numer sekwencyjny ostatniego pakietu danych
 	 * @param timeStamp - znacznik czasu ostatniego pakietu danych
@@ -472,7 +462,7 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	/**
 	 * Zdarzenie onImageProcessed - do przekazywania odebranych przetworzonego obrazu do wyświetlenia.
 	 *
-	 * @param WritableImage waterfallImage - obraz waterfall z danymi widma z odbiornika do wyświetlenia
+	 * @param waterfallImage - obraz waterfall z danymi widma z odbiornika do wyświetlenia
 	 * @param seqNumber - numer sekwencyjny ostatniego pakietu danych
 	 * @param timeStamp - znacznik czasu ostatniego pakietu danych
 	 * @param freqStart - częstotliwosć startowa danych ostatniego pakietu danych
@@ -492,11 +482,11 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	/**
 	 * Zdarzenie onDataProcessed - do przekazywania wykrytych sygnałów do wyświetlenia.
 	 *
-	 * @param double[] frequency - tablica wykrytych częstotliwości do wyświetlenia
-	 * @param double[] signalLevel - tablica poziomów sygnału wykrytych częstotliwości do wyświetlenia 
-	 * @param int seqNumber - numer sekwencyjny ostatniego pakietu danych
-	 * @param int timeStamp - znacznik czasu ostatniego pakietu danych
-	 * @param double threshold - poziom progowania powyżej którego są wykrywane sygnały
+	 * @param frequency - tablica wykrytych częstotliwości do wyświetlenia
+	 * @param signalLevel - tablica poziomów sygnału wykrytych częstotliwości do wyświetlenia
+	 * @param seqNumber - numer sekwencyjny ostatniego pakietu danych
+	 * @param timeStamp - znacznik czasu ostatniego pakietu danych
+	 * @param threshold - poziom progowania powyżej którego są wykrywane sygnały
 	 */
 	@Override
 	public void onDataProcessed(double[] frequency, double[] signalLevel, int seqNumber, double timeStamp,
