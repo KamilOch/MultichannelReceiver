@@ -8,7 +8,10 @@ import com.kdk.MultichannelReceiver.model.utils.PacketConverter;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -20,7 +23,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 
@@ -199,6 +204,32 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 
 	public void initialize() {
 		;
+	}
+	/**
+	 * Wyświetla DialogWindow O programie
+	 */
+	@FXML
+	public void aboutMenuItemHandler(){
+		final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(primaryStage);
+        VBox dialogVbox = new VBox(20);
+        dialogVbox.getChildren().add(new Text("O programie"));
+        dialogVbox.getChildren().add(new Text("Aplikacja klienta odbiornika radiowego."));
+        dialogVbox.getChildren().add(new Text("Autorzy: Damian Garsta, Kamil Ochnik, Kamil Wilgucki"));
+        
+        Button closeDialogBtn = new Button("Zamknij");
+        closeDialogBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	dialog.close();
+            }
+        });
+        dialogVbox.getChildren().add(closeDialogBtn);
+        Scene dialogScene = new Scene(dialogVbox, 300, 150);
+        dialog.setScene(dialogScene);
+        dialog.show();
+		
 	}
 
 	/**

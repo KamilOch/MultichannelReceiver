@@ -47,7 +47,7 @@
           <Menu mnemonicParsing="false" text="Pomoc">
             <items>
               <MenuItem mnemonicParsing="false" text="Pomoc" />
-                  <MenuItem mnemonicParsing="false" text="O programie" />
+                  <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#aboutMenuItemHandler" text="O programie" />
             </items>
           </Menu>
         </menus>
