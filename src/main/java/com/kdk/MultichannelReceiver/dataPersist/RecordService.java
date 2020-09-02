@@ -19,13 +19,10 @@ public class RecordService {
 
     private final ReceivedRecordEntityRepository receivedRecordEntityRepository;
     private final ThresholdCrossingEntityRepository thresholdCrossingEntityRepository;
-    private final List<ThresholdCrossingEntity> thresholdCrossingEntityList;
 
-    //UWAGA testowanie opcji zapisu do bazy danych (v2) zapis w 1 linii (krotce)
+    //UWAGA  opcja zapisu do bazy danych (v2) zapis w 1 linii (krotce)
     private final ReceivedRecordOneRawEntityRepository receivedRecordOneRawEntityRepository;
     private final ThresholdCrossingEntityOneRawRepository thresholdCrossingEntityOneRawRepository;
-    private ThresholdsTables thresholdsTables;
-
 
     /***
      * Konstruktor Klasy.
@@ -33,28 +30,22 @@ public class RecordService {
      * @param receivedRecordEntityRepository repozytorium zapisanych rekordów
      * @param thresholdCrossingEntityRepository repozytorium zapisanych rekordów które przekraczają próg
      * @param frequencyTable tabela częstotliwości
-     * @param thresholdCrossingEntityList lista obiektów które przekraczają próg
      * @param receivedRecordOneRawEntityRepository repozytorium zapisanych rekordów, zapis w 1 linii (krotce)
      * @param thresholdCrossingEntityOneRawRepository repozytorium zapisanych rekordów które przekraczają próg, zapis w 1 linii (krotce)
-     * @param thresholdsTables tabela przekroczeń progu
      */
     @Autowired
     public RecordService(RecordEntityRepository recordEntityRepository,
                          ReceivedRecordEntityRepository receivedRecordEntityRepository,
                          ThresholdCrossingEntityRepository thresholdCrossingEntityRepository,
                          FrequencyTable frequencyTable,
-                         List<ThresholdCrossingEntity> thresholdCrossingEntityList,
                          ReceivedRecordOneRawEntityRepository receivedRecordOneRawEntityRepository,
-                         ThresholdCrossingEntityOneRawRepository thresholdCrossingEntityOneRawRepository,
-                         ThresholdsTables thresholdsTables) {
+                         ThresholdCrossingEntityOneRawRepository thresholdCrossingEntityOneRawRepository) {
         this.recordEntityRepository = recordEntityRepository;
         this.receivedRecordEntityRepository = receivedRecordEntityRepository;
         this.thresholdCrossingEntityRepository = thresholdCrossingEntityRepository;
         this.frequencyTable = frequencyTable;
-        this.thresholdCrossingEntityList = thresholdCrossingEntityList;
         this.receivedRecordOneRawEntityRepository = receivedRecordOneRawEntityRepository;
         this.thresholdCrossingEntityOneRawRepository = thresholdCrossingEntityOneRawRepository;
-        this.thresholdsTables = thresholdsTables;
     }
 
     /***
@@ -76,35 +67,13 @@ public class RecordService {
     public ThresholdsTables addRecord(double[] receivedData, int dataSize, int seqNumber, double timeStamp,
                                       double freqStart, double freqStep, double threshold) {
 
-//        thresholdCrossingEntityList.clear();
-
         frequencyTable.generateFrequencyTable(dataSize, freqStart, freqStep);
 
         long idFromDB = saveRecordEntityInDb(timeStamp, seqNumber, threshold);
 
         saveReceivedRecordOneRowEntityInDb(dataSize, frequencyTable, receivedData, idFromDB);
 
-        ThresholdsTables thresholdsTables = saveThresholdCrossingOneRawEntityInDb(dataSize, frequencyTable, receivedData, idFromDB, threshold);
-
-//        for (int i = 0; i < dataSize; i++) {
-        //UWAGA v1 zapis danych 1 record tworzy  250 linii z danymi w db
-//            ReceivedRecordEntity newReceivedRecordEntity = ReceivedRecordEntity.builder()
-//                    .frequency(frequencyTable.getFrequency(i)).signalLevel(receivedData[i]).recordId(idFromDB).build();
-//            receivedRecordEntityRepository.save(newReceivedRecordEntity);
-
-
-//            if (receivedData[i] > threshold) {
-//                //UWAGA v1 zapis przekroczen, przekroczenie tworzy 1 linie z danymi w db
-//                ThresholdCrossingEntity newThresholdCrossingEntity = ThresholdCrossingEntity.builder()
-//                        .frequency(frequencyTable.getFrequency(i)).signalLevel(receivedData[i]).recordId(idFromDB)
-//                        .build();
-//                thresholdCrossingEntityRepository.save(newThresholdCrossingEntity);
-//
-//                thresholdCrossingEntityList.add(newThresholdCrossingEntity);
-//            }
-//        }
-
-        return thresholdsTables;
+        return saveThresholdCrossingOneRawEntityInDb(dataSize, frequencyTable, receivedData, idFromDB, threshold);
     }
 
     /***
@@ -217,7 +186,6 @@ public class RecordService {
                 .orElseThrow(IllegalArgumentException::new);
 
         return recordEntityFromDb.getId();
-
     }
 
     /***

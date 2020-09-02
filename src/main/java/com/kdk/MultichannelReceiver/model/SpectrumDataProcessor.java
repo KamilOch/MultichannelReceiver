@@ -39,22 +39,10 @@ public class SpectrumDataProcessor implements ReceiverDataConverterListener {
 	public void onDataReceived(double[] receivedData, int dataSize, int seqNumber, double timeStamp, double freqStart,
 			double freqStep) {
 
-		// serwis analizujacy i zapisujacy dane do bazy
-//		List<ThresholdCrossingEntity> actualThresholdList = recordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
 		ThresholdsTables actualThresholdList = recordService.addRecord(receivedData, dataSize, seqNumber, timeStamp, freqStart, freqStep, threshold);
 
-//		double[] frequency = new double[actualThresholdList.size()];
-//		double[] signalLevel = new double[actualThresholdList.size()];
-//
-//		for (int i = 0; i < actualThresholdList.size(); i++) {
-//			frequency[i] = actualThresholdList.get(i).getFrequency();
-//			signalLevel[i] = actualThresholdList.get(i).getSignalLevel();
-//		}
-		
-		// przekazanie danych do klasy wyświetlającej		
-//		spectrumDataProcessorListener.fire().onDataProcessed(frequency, signalLevel, seqNumber, timeStamp, threshold);
+		// przekazanie danych do klasy wyświetlającej
 		spectrumDataProcessorListener.fire().onDataProcessed(actualThresholdList.getFrequency(), actualThresholdList.getSignal(), seqNumber, timeStamp, threshold);
-
 	}
 
 	public void setRecordService(RecordService recordService) {

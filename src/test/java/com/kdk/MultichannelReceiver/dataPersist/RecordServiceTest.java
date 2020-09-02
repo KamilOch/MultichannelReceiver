@@ -2,7 +2,6 @@ package com.kdk.MultichannelReceiver.dataPersist;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -16,22 +15,18 @@ class RecordServiceTest {
     private final ReceivedRecordEntityRepository receivedRecordEntityRepository = mock(ReceivedRecordEntityRepository.class);
     private final ThresholdCrossingEntityRepository thresholdCrossingEntityRepository = mock(ThresholdCrossingEntityRepository.class);
     private final FrequencyTable frequencyTable = new FrequencyTable();
-    private final List<ThresholdCrossingEntity> thresholdCrossingEntityList = new ArrayList<>();
 
     //UWAGA testowanie opcji zapisu do bazy danych (v2) zapis w 1 linii (krotce)
     private final ReceivedRecordOneRawEntityRepository receivedRecordOneRawEntityRepository = mock(ReceivedRecordOneRawEntityRepository.class);
     private final ThresholdCrossingEntityOneRawRepository thresholdCrossingEntityOneRawRepository = mock(ThresholdCrossingEntityOneRawRepository.class);
-    private ThresholdsTables thresholdsTable;
 
     private RecordService testRecordService = new RecordService(
             recordEntityRepository,
             receivedRecordEntityRepository,
             thresholdCrossingEntityRepository,
             frequencyTable,
-            thresholdCrossingEntityList,
             receivedRecordOneRawEntityRepository,
-            thresholdCrossingEntityOneRawRepository,
-            thresholdsTable);
+            thresholdCrossingEntityOneRawRepository);
 
     @Test
     void addOneExampleRecordAndCheckRecordEntityRepository() {
@@ -152,7 +147,7 @@ class RecordServiceTest {
     }
 
     @Test
-    void addThreeExampleRecordAndCheckIfThresholdsTablesReturnTwoValues(){
+    void addThreeExampleRecordAndCheckIfThresholdsTablesReturnTwoValues() {
         //given
         double[] receivedData = new double[3];
         receivedData[0] = 100;
@@ -184,7 +179,7 @@ class RecordServiceTest {
     }
 
     @Test
-    void addTwoExampleRecordWhenThresholdHaveMinusValue(){
+    void addTwoExampleRecordWhenThresholdHaveMinusValue() {
         //given
         double[] receivedData = new double[3];
         receivedData[0] = -100;
@@ -422,7 +417,7 @@ class RecordServiceTest {
 
         when(recordEntityRepository.findByTimeStamp(58972597)).thenReturn(java.util.Optional.ofNullable(newRecord));
         //when
-       testRecordService.deleteRecordByTimeStamp(58972597);
+        testRecordService.deleteRecordByTimeStamp(58972597);
         //then
         verify(recordEntityRepository, times(1)).delete(newRecord);
     }
