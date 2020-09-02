@@ -8,6 +8,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 
 import javafx.application.Platform;
+import udp_socket.UDPDemoServer;
+
 import org.junit.BeforeClass;
 //import org.testfx.api.FxRobot;
 //import org.testfx.api.FxToolkit;
@@ -49,6 +51,7 @@ public class ReceiverUDPClientTest implements ReceiverDataConverterListener{
 		Thread.sleep(1250);
 		dataConverter = new ReceiverDataConverter(null);  
 		dataConverter.addListener(this);
+		new UDPDemoServer().start();
 		
 //		try {
 //
