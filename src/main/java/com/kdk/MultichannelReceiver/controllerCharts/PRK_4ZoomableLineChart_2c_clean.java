@@ -48,9 +48,9 @@ import java.util.concurrent.PriorityBlockingQueue;
 public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListener, ReceiverDataConverterListener {
 
     public VBox chartsVbox;
-    public static final int NUM_DATA_POINTS = 250;
+    public static final int NUM_DATA_POINTS = 256;
     public static final int X_MIN = 30000000;
-    public static final int X_MAX = 30000000 + 10500 * NUM_DATA_POINTS;
+    public static final int X_MAX = 30000000 + 10500 * (NUM_DATA_POINTS-1);
     public static final int Y_MIN = -150;
     public static final int Y_MAX = 50;
 
@@ -60,13 +60,13 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
     boolean bStop = false;
     static int nrTimeStamp = -1;
 
-    private TextField xField;
+    TextField xField;
     private TextField yField;// to samo co tresholdField
 
     private String xFieldPrzed;
     private String yFieldPrzed;
 
-    private TextField xMarkedField;
+    TextField xMarkedField;
 
     double xMarked;
 
@@ -95,6 +95,14 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
             comparator_queueData);
     ReceiverDataConverter dataConverter;// new ReceiverDataConverter();
 
+	/**
+	* Konstruktor tylko dla stworzenia obiektu podczas testowania metod klasy
+	*/
+	public PRK_4ZoomableLineChart_2c_clean()
+	{
+		
+	}
+	
     /**
      * Konstruktor
      * @param dataConverter obiekt klasy do ktorej dopina sie nasluchiwacza otrzymywania danych
@@ -254,7 +262,7 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
                 .or(zoomRect.heightProperty().lessThan(5));
         zoomButton.disableProperty().bind(disableControls);
 
-        controls.getChildren().addAll(startButton, zoomButton, zoomInButton, zoomOutButton, resetButton,
+        controls.getChildren().addAll(/*startButton,*/ zoomButton, zoomInButton, zoomOutButton, resetButton,
                 new Label("Hz ="), xField, new Label("Threshold ="), yField, new Label("Amplitude ="), xMarkedField);
 
         // ++++++++++++++
@@ -373,7 +381,7 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
      * Uaktulnia pole tekstowe wyswietlajace amplitude (decybele) na podstawie wartosci z
      * pola tekstowego oznaczajacego wartosc na osi x (czestotliwosc).
      */
-    private void updateMarkedFreq()// ObservableList<XYChart.Data<Number, Number>> data)
+    void updateMarkedFreq()// ObservableList<XYChart.Data<Number, Number>> data)
     {
         // numbers including scientific notation:
         if (xField.getText().matches("-?\\d+(\\.\\d+)?([eE][+-]?\\d+)?")) {
@@ -450,7 +458,7 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
      *
      * @return zwraca liste z seria danych
      */
-    private ObservableList<Series<Number, Number>> generateChartData() {
+    ObservableList<Series<Number, Number>> generateChartData() {
         series = new Series<>();
         series.setName("Data");
         final Random rng = new Random();
