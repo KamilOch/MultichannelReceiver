@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kdk.MultichannelReceiver.controller.MainWindowController">
+<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kdk.MultichannelReceiver.controller.MainWindowController">
    <children>
       <MenuBar>
         <menus>
@@ -46,17 +46,17 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Pomoc">
             <items>
-              <MenuItem disable="true" mnemonicParsing="false" text="Pomoc" visible="false" />
+              <MenuItem mnemonicParsing="false" text="Pomoc" />
                   <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#aboutMenuItemHandler" text="O programie" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <BorderPane fx:id="rightPane" layoutX="450.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
+      <BorderPane fx:id="rightPane" layoutX="450.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
          <center>
-            <VBox fx:id="vboxCharts" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="vboxCharts" prefHeight="592.0" prefWidth="670.0" BorderPane.alignment="CENTER">
                <children>
-                  <LineChart fx:id="lineChart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="573.0">
+                  <LineChart fx:id="lineChart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="574.0">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -64,7 +64,7 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </LineChart>
-                  <HBox prefHeight="34.0" prefWidth="670.0">
+                  <HBox prefHeight="26.0" prefWidth="563.0">
                      <children>
                         <Label text="Marker [MHz]">
                            <HBox.margin>
@@ -72,9 +72,10 @@
                            </HBox.margin>
                         </Label>
                         <TextField fx:id="fMarkerField" text="0" />
+                        <TextField fx:id="tresholdField" prefWidth="50.0" text="95" visible="false" />
                      </children>
                   </HBox>
-                  <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imageView" fitHeight="168.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
                         <Insets left="42.0" />
                      </VBox.margin>
@@ -82,15 +83,8 @@
                </children>
             </VBox>
          </center>
-         <bottom>
-            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <TextField fx:id="tresholdField" prefWidth="50.0" text="95" visible="false" />
-               </children>
-            </HBox>
-         </bottom>
          <right>
-            <VBox prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+            <VBox prefWidth="150.0" BorderPane.alignment="CENTER">
                <children>
                   <Label text="F start[MHz]">
                      <font>
@@ -100,7 +94,7 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="fStartField" prefWidth="80.0" text="0" />
+                  <TextField fx:id="fStartField" disable="true" prefWidth="80.0" text="0" />
                   <Label text="F stop [MHz]">
                      <font>
                         <Font size="14.0" />
@@ -109,7 +103,7 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="fStopField" prefWidth="80.0">
+                  <TextField fx:id="fStopField" disable="true" prefWidth="80.0">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></TextField>
@@ -124,7 +118,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="fStepField" prefWidth="80.0">
+                  <TextField fx:id="fStepField" disable="true" prefWidth="80.0">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></TextField>
@@ -136,7 +130,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="seqNumberField" />
+                  <TextField fx:id="seqNumberField" disable="true" />
                   <Label text="Time Stamp">
                      <font>
                         <Font size="14.0" />
@@ -145,9 +139,9 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="timeStampField" />
+                  <TextField fx:id="timeStampField" disable="true" />
                   <Separator prefWidth="200.0" />
-                  <CheckBox mnemonicParsing="false" text="Pauza wyświetlania">
+                  <CheckBox disable="true" mnemonicParsing="false" text="Pauza wyświetlania">
                      <VBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
@@ -160,7 +154,7 @@
       </BorderPane>
       <BorderPane prefHeight="600.0" prefWidth="450.0" AnchorPane.topAnchor="20.0">
          <left>
-            <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+            <VBox prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
                <children>
                   <Button fx:id="loadFileBtn" mnemonicParsing="false" onAction="#loadFileHandler" prefHeight="25.0" prefWidth="80.0" text="Wczytaj" visible="false">
                      <font>
@@ -177,17 +171,17 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="databaseBtn" disable="true" mnemonicParsing="false" onAction="#databaseBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Baza danych" visible="false">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
                   <Button fx:id="demoChartBtn" mnemonicParsing="false" onAction="#demoChartBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Demo">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
                   <Button fx:id="closeStageBtn" mnemonicParsing="false" onAction="#closeStageBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Zakończ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="databaseBtn" disable="true" mnemonicParsing="false" onAction="#databaseBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Baza danych">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -206,7 +200,7 @@
                         <Insets left="80.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TableView fx:id="tableView" maxHeight="-Infinity" maxWidth="350.0" prefHeight="200.0" prefWidth="150.0">
+                  <TableView fx:id="tableView" maxHeight="-Infinity" maxWidth="350.0" prefHeight="300.0" prefWidth="150.0">
                     <columns>
                       <TableColumn fx:id="timeStampColumn" maxWidth="200.0" prefWidth="100.0" text="Timestamp" />
                       <TableColumn fx:id="signalsNumberColumn" maxWidth="200.0" prefWidth="100.0" text="Poziom sygnału [dBm]" />
@@ -222,7 +216,7 @@
                         <Insets left="80.0" />
                      </VBox.margin>
                   </Label>
-                  <TableView prefWidth="200.0">
+                  <TableView prefHeight="202.0" prefWidth="350.0">
                     <columns>
                       <TableColumn fx:id="lpColumn" prefWidth="29.0" text="Lp.." />
                       <TableColumn fx:id="siognalTypeColumn" prefWidth="121.0" text="Typ syganłu" />
@@ -234,10 +228,10 @@
             </VBox>
          </center>
       </BorderPane>
-      <ToolBar prefHeight="40.0" prefWidth="1280.0" AnchorPane.topAnchor="780.0">
+      <ToolBar prefHeight="40.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0">
          <items>
             <Label text="Status: " />
-            <TextField fx:id="tStatusField" prefHeight="25.0" prefWidth="928.0" />
+            <TextField fx:id="tStatusField" disable="true" prefHeight="25.0" prefWidth="928.0" />
          </items>
       </ToolBar>
    </children>

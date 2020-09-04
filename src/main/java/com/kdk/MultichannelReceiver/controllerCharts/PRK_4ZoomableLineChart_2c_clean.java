@@ -424,6 +424,10 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 
         chart.setLegendVisible(false);
 
+        chart.setMinHeight(400);
+        chart.setPrefHeight(400);
+        chart.setMaxHeight(400);
+        
         return chart;
     }
 
@@ -1087,6 +1091,8 @@ public class PRK_4ZoomableLineChart_2c_clean implements SpectrumWaterfallListene
 
         image.setPreserveRatio(false);
 
+        image.setFitHeight(200);
+        
         HBox zoom = new HBox(10);
         zoom.setAlignment(Pos.CENTER);
 
