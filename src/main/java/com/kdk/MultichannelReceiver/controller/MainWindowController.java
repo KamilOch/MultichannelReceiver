@@ -145,6 +145,8 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 	
 		imageView.setFitWidth(lineChart.getWidth());
 		
+		this.primaryStage.setOnCloseRequest(mouseEvent->System.exit(0));
+		
 /*	//commented by Damian:
 		tresholdField.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
 	        if (newPropertyValue) {
