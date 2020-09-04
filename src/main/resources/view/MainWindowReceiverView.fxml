@@ -46,7 +46,7 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Pomoc">
             <items>
-              <MenuItem mnemonicParsing="false" text="Pomoc" />
+              <MenuItem disable="true" mnemonicParsing="false" text="Pomoc" visible="false" />
                   <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#aboutMenuItemHandler" text="O programie" />
             </items>
           </Menu>
@@ -177,7 +177,7 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="databaseBtn" mnemonicParsing="false" onAction="#databaseBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Baza danych">
+                  <Button fx:id="databaseBtn" disable="true" mnemonicParsing="false" onAction="#databaseBtnHandler" prefHeight="25.0" prefWidth="80.0" text="Baza danych" visible="false">
                      <font>
                         <Font size="14.0" />
                      </font>

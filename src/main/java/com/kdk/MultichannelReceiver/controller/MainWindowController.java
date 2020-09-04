@@ -29,6 +29,8 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -109,6 +111,8 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		//Damian dodal linie:
 		PRK_4ZoomableLineChart_2c_clean charts = new PRK_4ZoomableLineChart_2c_clean(dataConverter, vboxCharts,
 				spectrumProcessor);
+		
+
 		
 		//vboxCharts = charts.chartsVbox;
 
@@ -488,14 +492,14 @@ public class MainWindowController implements ReceiverDataConverterListener, Spec
 		
 		
 		//tu można odpalić wątek do odświeżania wykresu widma
-		lineChart.getData().clear();
-		XYChart.Series dataSeries1 = new XYChart.Series();
-		dataSeries1.setName("WYKRES WIDMA");
-		for(int i = 0; i<receivedData.length; i++) {
-			dataSeries1.getData().add(new XYChart.Data( Double.toString(freqStart+ i*freqStep), receivedData[i]));
-		}
-		
-		lineChart.getData().add(dataSeries1);
+//		lineChart.getData().clear();
+//		XYChart.Series dataSeries1 = new XYChart.Series();
+//		dataSeries1.setName("WYKRES WIDMA");
+//		for(int i = 0; i<receivedData.length; i++) {
+//			dataSeries1.getData().add(new XYChart.Data( Double.toString(freqStart+ i*freqStep), receivedData[i]));
+//		}
+//		
+//		lineChart.getData().add(dataSeries1);
 		
 	}
 
